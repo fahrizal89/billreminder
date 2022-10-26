@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "id.fahrizal.billassistance"
+        applicationId "id.fahrizal.billreminder"
         minSdk 23
         targetSdk 32
         versionCode 1
