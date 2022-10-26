@@ -28,10 +28,9 @@ object SchedulerManager {
         )
 
         val alarmManager = context.getSystemService(ComponentActivity.ALARM_SERVICE) as AlarmManager
-        alarmManager.setRepeating(
+        alarmManager.set(
             AlarmManager.RTC_WAKEUP,
             time,
-            DateUtil.getFullDayInMillis(),
             pendingIntent
         )
     }
