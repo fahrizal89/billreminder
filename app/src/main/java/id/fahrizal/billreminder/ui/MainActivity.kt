@@ -1,4 +1,4 @@
-package id.fahrizal.billreminder
+package id.fahrizal.billreminder.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,31 +20,23 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BillReminderTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+            BillScreen()
         }
-        val time = DateUtil.getDate(8,46,0).time
-        SchedulerManager.set(this,time, "test", "body")
+        setSchedule()
+    }
+
+    private fun setSchedule(){
+        val time = DateUtil.getDate(9,16,0).time
+        SchedulerManager.set(this,time, "test", "body", 1)
         Timber.d("SCHEDULE ACTIVATED!")
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello... $name!")
-}
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     BillReminderTheme {
-        Greeting("Android")
+        BillScreen()
     }
 }
