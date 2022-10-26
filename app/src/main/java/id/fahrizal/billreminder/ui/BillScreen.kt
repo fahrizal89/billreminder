@@ -1,23 +1,28 @@
 package id.fahrizal.billreminder.ui
 
+import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import id.fahrizal.billreminder.R
+import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 
 @Composable
 fun BillScreen() {
+    val context = LocalContext.current
     BillReminderTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
             AddButton {
-
+                val intent = Intent(context, BillInputActivity::class.java)
+                context.startActivity(intent)
             }
         }
     }
