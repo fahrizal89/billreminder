@@ -1,6 +1,8 @@
 package id.fahrizal.billreminder.ui.input
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +24,11 @@ import timber.log.Timber
 @Composable
 fun BillInputScreen() {
     val context = LocalContext.current
-    Column(modifier = Modifier.padding(4.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(4.dp)
+            .animateContentSize()
+    ) {
         Text(
             text = stringResource(id = R.string.add_new_bill),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -42,14 +48,37 @@ fun BillInputScreen() {
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
 
-        DayInMonthGrid(onItemClick = {
-            Timber.d("Fahrizal click $it")
-        })
+        NumberSelector()
 
         SaveButton {
             (context as Activity).finish()
         }
     }
+}
+
+@Composable
+fun NumberSelector() {
+    var isExpanded by remember { mutableStateOf(false) }
+    var currentNumber by remember { mutableStateOf(25) }
+
+
+    if (isExpanded) {
+        AnimatedVisibility(visible = isExpanded) {
+            DayInMonthGrid(onItemClick = { index ->
+                Timber.d("Fahrizal click $index")
+                isExpanded = false
+                currentNumber = index + 1
+            })
+        }
+
+    } else {
+        Button(onClick = {
+            isExpanded = true
+        }, modifier = Modifier.padding(8.dp)) {
+            Text(text = currentNumber.toString())
+        }
+    }
+
 }
 
 @Composable

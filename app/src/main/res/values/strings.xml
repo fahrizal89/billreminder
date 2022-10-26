@@ -6,5 +6,5 @@
     <string name="add_new_bill">Add new Bill</string>
     <string name="bill_name" >Bill Name</string>
     <string name="bill_name_hint" >Ex: Electricity, Car, Insurance, etc</string>
-    <string name="reminder_date_label">Remind me every month at:</string>
+    <string name="reminder_date_label">Reminder Date (monthly) at</string>
 </resources>
