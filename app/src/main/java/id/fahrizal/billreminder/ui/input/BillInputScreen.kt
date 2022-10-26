@@ -12,10 +12,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import id.fahrizal.billreminder.R
@@ -43,6 +46,16 @@ fun BillInputScreen() {
                 .padding(horizontal = 8.dp, vertical = 16.dp)
         )
 
+        InputTextField(
+            labelResource = R.string.amount,
+            hintResource = R.string.amount_hint,
+            singleLine = true,
+            keyboardType = KeyboardType.Number,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 16.dp)
+        )
+
         Text(
             text = stringResource(id = R.string.reminder_date_label),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
@@ -56,11 +69,12 @@ fun BillInputScreen() {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NumberSelector() {
     var isExpanded by remember { mutableStateOf(false) }
     var currentNumber by remember { mutableStateOf(25) }
-
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     if (isExpanded) {
         AnimatedVisibility(visible = isExpanded) {
@@ -73,6 +87,7 @@ fun NumberSelector() {
 
     } else {
         Button(onClick = {
+            keyboardController?.hide()
             isExpanded = true
         }, modifier = Modifier.padding(8.dp)) {
             Text(text = currentNumber.toString())
@@ -87,6 +102,7 @@ fun InputTextField(
     hintResource: Int,
     text: String = "",
     singleLine: Boolean = true,
+    keyboardType: KeyboardType = KeyboardType.Text,
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
@@ -94,10 +110,11 @@ fun InputTextField(
 ) {
     var textField by remember { mutableStateOf(TextFieldValue(text)) }
     val keyboardOptions: KeyboardOptions = if (singleLine) {
-        KeyboardOptions(imeAction = ImeAction.Next)
+        KeyboardOptions(imeAction = ImeAction.Next, keyboardType = keyboardType)
     } else {
-        KeyboardOptions(imeAction = ImeAction.Default)
+        KeyboardOptions(imeAction = ImeAction.Default, keyboardType = keyboardType)
     }
+
     TextField(
         value = textField,
         onValueChange = {
