@@ -10,7 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import id.fahrizal.billreminder.scheduler.SchedulerManager
+import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
@@ -27,12 +30,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        val time = DateUtil.getDate(8,46,0).time
+        SchedulerManager.set(this,time, "test", "body")
+        Timber.d("SCHEDULE ACTIVATED!")
     }
 }
 
 @Composable
 fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+    Text(text = "Hello... $name!")
 }
 
 @Preview(showBackground = true)
