@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BillScreen()
         }
-        setSchedule()
+//        setSchedule()
     }
 
     private fun setSchedule(){

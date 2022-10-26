@@ -21,12 +21,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
-import timber.log.Timber
+import id.fahrizal.billreminder.domain.model.Bill
 
 @Composable
-fun BillInputScreen() {
+fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
     val context = LocalContext.current
+    val bill: Bill by remember { mutableStateOf(Bill()) }
+
     Column(
         modifier = Modifier
             .padding(4.dp)
@@ -44,7 +47,9 @@ fun BillInputScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 16.dp)
-        )
+        ) { billName ->
+            bill.name = billName
+        }
 
         InputTextField(
             labelResource = R.string.amount,
@@ -54,16 +59,23 @@ fun BillInputScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 16.dp)
-        )
+        ) { inputedAmount ->
+            if (inputedAmount.isNotEmpty()) {
+                bill.amount = inputedAmount.toDouble()
+            }
+        }
 
         Text(
             text = stringResource(id = R.string.reminder_date_label),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
 
-        NumberSelector()
+        NumberSelector(onItemClick = { index ->
+            bill.reminderDate = index + 1
+        })
 
         SaveButton {
+            billInputViewModel.save(bill)
             (context as Activity).finish()
         }
     }
@@ -71,7 +83,7 @@ fun BillInputScreen() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun NumberSelector() {
+fun NumberSelector(onItemClick: (index: Int) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
     var currentNumber by remember { mutableStateOf(25) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -79,9 +91,9 @@ fun NumberSelector() {
     if (isExpanded) {
         AnimatedVisibility(visible = isExpanded) {
             DayInMonthGrid(onItemClick = { index ->
-                Timber.d("Fahrizal click $index")
                 isExpanded = false
                 currentNumber = index + 1
+                onItemClick(index)
             })
         }
 
