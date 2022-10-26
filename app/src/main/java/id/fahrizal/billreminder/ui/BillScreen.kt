@@ -1,29 +1,35 @@
 package id.fahrizal.billreminder.ui
 
 import android.content.Intent
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.domain.model.Bill
 import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 
 @Composable
-fun BillScreen() {
+fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
     val context = LocalContext.current
     BillReminderTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            BillList()
+        Surface(modifier = Modifier.fillMaxSize()) {
+            val state = mainViewModel.uiState.collectAsState().value
+            when (state) {
+                is MainViewModel.MainUiState.Loaded -> BillList(state.bills)
+                is MainViewModel.MainUiState.Loading -> BillList()
+                is MainViewModel.MainUiState.Error -> ShowToatError(state.stringRes)
+            }
 
             AddButton {
                 val intent = Intent(context, BillInputActivity::class.java)
@@ -34,7 +40,7 @@ fun BillScreen() {
 }
 
 @Composable
-fun BillList(bills: ArrayList<Bill> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
+fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
     Divider()
     LazyColumn(modifier = modifier) {
         items(bills) { bill ->
@@ -68,4 +74,9 @@ fun AddButton(onClick: () -> Unit) {
             Text(text = stringResource(id = R.string.add))
         }
     }
+}
+
+@Composable
+fun ShowToatError(@StringRes resId: Int) {
+    Toast.makeText(LocalContext.current, stringResource(id = resId), Toast.LENGTH_SHORT).show()
 }
