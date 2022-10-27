@@ -10,5 +10,7 @@
     <string name="bill_name_hint" >Ex: Electricity, Car, Insurance, etc</string>
     <string name="reminder_date_label">Reminder Date (monthly) at</string>
 
+    <string name="reminder_day">Reminder Day</string>
+
     <string name="error">Error!</string>
 </resources>

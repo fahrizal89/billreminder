@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -26,8 +27,8 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             val state = mainViewModel.uiState.collectAsState().value
             when (state) {
-                is MainViewModel.MainUiState.Loaded -> BillList(state.bills)
-                is MainViewModel.MainUiState.Loading -> BillList()
+                is MainViewModel.MainUiState.Loaded -> BillTable(state.bills)
+                is MainViewModel.MainUiState.Loading -> BillTable()
                 is MainViewModel.MainUiState.Error -> ShowToatError(state.stringRes)
             }
 
@@ -40,19 +41,65 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
+fun BillTable(bills: List<Bill> = ArrayList()) {
+    Column {
+        BillHeader()
+        Divider(modifier = Modifier.padding(4.dp))
+        BillList(bills)
+    }
+}
+
+@Composable
 fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
-    Divider()
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         items(bills) { bill ->
-            Row {
-                Text(
-                    text = bill.reminderDate.toString(),
-                    modifier = Modifier.padding(horizontal = 14.dp)
-                )
-                Text(text = bill.name, modifier = Modifier.padding(horizontal = 14.dp))
-                Text(text = bill.amount.toString(), modifier = Modifier.padding(horizontal = 14.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = bill.reminderDate.toString(),
+                        modifier = Modifier.padding(horizontal = 14.dp)
+                    )
+                }
+                Column(Modifier.weight(1f)) {
+                    Text(text = bill.name, modifier = Modifier.padding(horizontal = 14.dp))
+                }
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = bill.amount.toString(),
+                        modifier = Modifier.padding(horizontal = 14.dp)
+                    )
+                }
             }
             Divider()
+        }
+    }
+}
+
+@Composable
+fun BillHeader() {
+    Row(
+        modifier = Modifier.padding(top = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = stringResource(id = R.string.reminder_day),
+                modifier = Modifier.padding(horizontal = 14.dp),
+            )
+        }
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = stringResource(id = R.string.bill_name),
+                modifier = Modifier.padding(horizontal = 14.dp)
+            )
+        }
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = stringResource(id = R.string.amount),
+                modifier = Modifier.padding(horizontal = 14.dp)
+            )
         }
     }
 }
