@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import id.fahrizal.billreminder.scheduler.SchedulerManager
-import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -22,11 +24,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             BillScreen(mainViewModel)
         }
+
         fetchBills()
     }
 
     private fun fetchBills() {
-        mainViewModel.fetchBills()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.fetchBills()
+            }
+        }
     }
 }
 

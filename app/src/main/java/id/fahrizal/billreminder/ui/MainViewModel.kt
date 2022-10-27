@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.fahrizal.billreminder.R
-import id.fahrizal.billreminder.domain.model.Bill
+import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.domain.usecase.GetBills
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +25,13 @@ class MainViewModel @Inject constructor(
 
     fun fetchBills() {
         viewModelScope.launch(ioCoroutineDispatcher) {
-            val bills = getBills()
-            _uiState.value = MainUiState.Loaded(bills)
+            try {
+                val bills = getBills()
+                _uiState.value = MainUiState.Loaded(bills)
+            } catch (e: Exception) {
+                Timber.e(e)
+                _uiState.value = MainUiState.Error()
+            }
         }
     }
 

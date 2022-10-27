@@ -1,7 +1,7 @@
 package id.fahrizal.billreminder.domain.usecase
 
 import id.fahrizal.billreminder.data.repository.BillRepository
-import id.fahrizal.billreminder.domain.model.Bill
+import id.fahrizal.billreminder.data.model.Bill
 import javax.inject.Inject
 
 class GetBills @Inject constructor(

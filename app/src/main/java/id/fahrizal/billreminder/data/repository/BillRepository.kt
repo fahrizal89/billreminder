@@ -1,6 +1,6 @@
 package id.fahrizal.billreminder.data.repository
 
-import id.fahrizal.billreminder.domain.model.Bill
+import id.fahrizal.billreminder.data.model.Bill
 
 interface BillRepository {
 
