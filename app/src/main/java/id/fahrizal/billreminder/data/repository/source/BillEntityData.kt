@@ -4,6 +4,6 @@ import id.fahrizal.billreminder.domain.model.Bill
 
 interface BillEntityData {
 
-    suspend fun save(bills: List<Bill>)
+    suspend fun save(bill: Bill)
     suspend fun get(): List<Bill>
 }
