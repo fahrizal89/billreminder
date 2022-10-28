@@ -8,7 +8,7 @@ class BillEntityRepository @Inject constructor(
     private val billEntityData: BillEntityData
 ) : BillRepository {
 
-    override suspend fun save(bill: Bill) {
+    override suspend fun save(bill: Bill)  : Long{
         return billEntityData.save(bill)
     }
 

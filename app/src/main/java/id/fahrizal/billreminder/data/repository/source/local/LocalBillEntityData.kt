@@ -10,8 +10,8 @@ class LocalBillEntityData @Inject constructor(
     private val billDao: BillDao
 ) : BillEntityData {
 
-    override suspend fun save(bill: Bill) {
-        billDao.insert(bill)
+    override suspend fun save(bill: Bill) : Long {
+        return billDao.insert(bill)
     }
 
     override suspend fun get(): List<Bill> {

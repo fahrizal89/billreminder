@@ -7,7 +7,7 @@ import id.fahrizal.billreminder.data.model.Bill
 interface BillDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(bill: Bill)
+    fun insert(bill: Bill) : Long
 
     @Query("SELECT * FROM bill")
     fun getBills(): List<Bill>
