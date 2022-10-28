@@ -58,7 +58,7 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = bill.reminderDate.toString(),
+                        text = bill.dayInMonth.toString(),
                         modifier = Modifier.padding(horizontal = 14.dp)
                     )
                 }

@@ -71,7 +71,7 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
         )
 
         NumberSelector(onItemClick = { index ->
-            bill.reminderDate = index + 1
+            bill.dayInMonth = index + 1
         })
 
         SaveButton {

@@ -8,7 +8,7 @@ data class Bill(
     @PrimaryKey var id: Long? = null,
     var name: String = "",
     var amount: Double = 0.0,
-    var reminderDate: Int = DEFAULT_DAY_IN_MONTH
+    var dayInMonth: Int = DEFAULT_DAY_IN_MONTH
 ){
     companion object{
         const val DEFAULT_DAY_IN_MONTH = 25
