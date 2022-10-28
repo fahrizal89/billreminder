@@ -1,14 +1,17 @@
 package id.fahrizal.billreminder.data.repository
 
-import id.fahrizal.billreminder.data.repository.source.BillEntityData
 import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.data.model.Reminder
+import id.fahrizal.billreminder.data.repository.source.BillEntityData
+import id.fahrizal.billreminder.data.repository.source.ReminderEntityData
 import javax.inject.Inject
 
 class BillEntityRepository @Inject constructor(
-    private val billEntityData: BillEntityData
+    private val billEntityData: BillEntityData,
+    private val reminderEntityData: ReminderEntityData
 ) : BillRepository {
 
-    override suspend fun save(bill: Bill)  : Long{
+    override suspend fun save(bill: Bill): Long {
         return billEntityData.save(bill)
     }
 
@@ -16,4 +19,11 @@ class BillEntityRepository @Inject constructor(
         return billEntityData.get()
     }
 
+    override suspend fun saveReminders(reminders: List<Reminder>) {
+        reminderEntityData.saveReminders(reminders)
+    }
+
+    override suspend fun getReminders(): List<Reminder> {
+        return reminderEntityData.getReminders()
+    }
 }

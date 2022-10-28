@@ -14,7 +14,7 @@ class SaveBill @Inject constructor(
     suspend operator fun invoke(bill: Bill) {
         val id = billRepository.save(bill)
         val reminders = generateReminderInYear(id, bill.reminderDate)
-
+        billRepository.saveReminders(reminders)
     }
 
     private fun generateReminderInYear(
