@@ -19,6 +19,7 @@ import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
+import id.fahrizal.billreminder.util.CurrencyUtil
 
 @Composable
 fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
@@ -67,7 +68,7 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = bill.amount.toString(),
+                        text = CurrencyUtil.getRupiahAmount(bill.amount),
                         modifier = Modifier.padding(horizontal = 14.dp)
                     )
                 }
