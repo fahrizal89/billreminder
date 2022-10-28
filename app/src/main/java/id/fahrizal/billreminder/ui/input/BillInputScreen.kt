@@ -85,7 +85,7 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
 @Composable
 fun NumberSelector(onItemClick: (index: Int) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
-    var currentNumber by remember { mutableStateOf(25) }
+    var currentNumber by remember { mutableStateOf(Bill.DEFAULT_DAY_IN_MONTH) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (isExpanded) {
