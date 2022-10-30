@@ -38,7 +38,7 @@ object DateUtil {
 
     fun getMonth(date: Date): Int = SimpleDateFormat("MM", Locale.US).format(date).toInt() - 1
 
-    fun getFullDayInMillis(): Long {
-        return 1000 * 60 * 60 * 24
+    fun getTimeInString(time: Long) : String {
+        return Date(time).toString()
     }
 }

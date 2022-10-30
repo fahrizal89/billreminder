@@ -10,8 +10,8 @@ interface ReminderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(reminders: List<Reminder>)
 
-    @Query("SELECT * FROM reminder")
-    fun get(): List<Reminder>
+    @Query("SELECT * FROM reminder WHERE billId LIKE :billIdString")
+    fun get(billIdString: String): List<Reminder>
 
     @Delete
     fun delete(reminders: List<Reminder>)

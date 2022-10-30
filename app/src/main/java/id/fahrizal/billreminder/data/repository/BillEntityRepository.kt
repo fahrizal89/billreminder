@@ -21,6 +21,8 @@ class BillEntityRepository @Inject constructor(
 
     override suspend fun saveReminders(reminders: List<Reminder>) {
         reminderEntityData.saveReminders(reminders)
+        val savedReminder = reminderEntityData.getReminders(reminders[0].id)
+        reminderEntityData.setReminderNotification(savedReminder)
     }
 
     override suspend fun getReminders(): List<Reminder> {
