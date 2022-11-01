@@ -55,7 +55,8 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         items(bills) { bill ->
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(8.dp)
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -63,10 +64,10 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
                         modifier = Modifier.padding(horizontal = 14.dp)
                     )
                 }
-                Column(Modifier.weight(1f)) {
+                Column(Modifier.weight(2f)) {
                     Text(text = bill.name, modifier = Modifier.padding(horizontal = 14.dp))
                 }
-                Column(Modifier.weight(1f)) {
+                Column(Modifier.weight(2f)) {
                     Text(
                         text = CurrencyUtil.getRupiahAmount(bill.amount),
                         modifier = Modifier.padding(horizontal = 14.dp)
@@ -82,21 +83,21 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
 fun BillHeader() {
     Row(
         modifier = Modifier.padding(top = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
             Text(
-                text = stringResource(id = R.string.reminder_day),
+                text = stringResource(id = R.string.date),
                 modifier = Modifier.padding(horizontal = 14.dp),
             )
         }
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(2f)) {
             Text(
                 text = stringResource(id = R.string.bill_name),
                 modifier = Modifier.padding(horizontal = 14.dp)
             )
         }
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(2f)) {
             Text(
                 text = stringResource(id = R.string.amount),
                 modifier = Modifier.padding(horizontal = 14.dp)
