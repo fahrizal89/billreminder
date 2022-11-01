@@ -23,29 +23,32 @@ private val Domine = FontFamily(
     Font(R.font.domine_bold, FontWeight.Bold)
 )
 
-val Typography = Typography(
+val Typography = Typography()
+
+
+/*
     h4 = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W600,
         fontSize = 30.sp
     ),
     h5 = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W600,
         fontSize = 24.sp
     ),
     h6 = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W600,
         fontSize = 20.sp
     ),
     subtitle1 = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W600,
         fontSize = 16.sp
     ),
     subtitle2 = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         fontSize = 14.sp
     ),
@@ -55,22 +58,22 @@ val Typography = Typography(
         fontSize = 16.sp
     ),
     body2 = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontSize = 14.sp
     ),
     button = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         fontSize = 14.sp
     ),
     caption = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     ),
     overline = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         fontSize = 12.sp
     )
-)
+)*/

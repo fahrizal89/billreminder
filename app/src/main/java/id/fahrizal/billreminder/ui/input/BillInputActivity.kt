@@ -22,7 +22,5 @@ class BillInputActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-    BillReminderTheme {
-        BillInputScreen()
-    }
+    BillInputScreen()
 }

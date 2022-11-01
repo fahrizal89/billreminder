@@ -21,62 +21,66 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 
 @Composable
 fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
     val context = LocalContext.current
     val bill: Bill by remember { mutableStateOf(Bill()) }
 
-    Column(
-        modifier = Modifier
-            .padding(4.dp)
-            .animateContentSize()
-    ) {
-        Text(
-            text = stringResource(id = R.string.add_new_bill),
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.h5,
-        )
-
-        InputTextField(
-            labelResource = R.string.bill_name,
-            hintResource = R.string.bill_name_hint,
+    BillReminderTheme {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 16.dp)
-        ) { billName ->
-            bill.name = billName
-        }
+                .padding(4.dp)
+                .animateContentSize()
+        ) {
+            Text(
+                text = stringResource(id = R.string.add_new_bill),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                style = MaterialTheme.typography.h5,
+            )
 
-        InputTextField(
-            labelResource = R.string.amount,
-            hintResource = R.string.amount_hint,
-            singleLine = true,
-            keyboardType = KeyboardType.Number,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 16.dp)
-        ) { inputedAmount ->
-            if (inputedAmount.isNotEmpty()) {
-                bill.amount = inputedAmount.toDouble()
+            InputTextField(
+                labelResource = R.string.bill_name,
+                hintResource = R.string.bill_name_hint,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 16.dp)
+            ) { billName ->
+                bill.name = billName
             }
-        }
 
-        Text(
-            text = stringResource(id = R.string.reminder_date_label),
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-        )
+            InputTextField(
+                labelResource = R.string.amount,
+                hintResource = R.string.amount_hint,
+                singleLine = true,
+                keyboardType = KeyboardType.Number,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 16.dp)
+            ) { inputedAmount ->
+                if (inputedAmount.isNotEmpty() && inputedAmount.isDigitsOnly()) {
+                    bill.amount = inputedAmount.toDouble()
+                }
+            }
 
-        NumberSelector(onItemClick = { index ->
-            bill.dayInMonth = index + 1
-        })
+            Text(
+                text = stringResource(id = R.string.reminder_date_label),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+            )
 
-        SaveButton {
-            billInputViewModel.save(bill)
-            (context as Activity).finish()
+            NumberSelector(onItemClick = { index ->
+                bill.dayInMonth = index + 1
+            })
+
+            SaveButton {
+                billInputViewModel.save(bill)
+                (context as Activity).finish()
+            }
         }
     }
 }
@@ -117,7 +121,7 @@ fun InputTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .padding(8.dp),
+        .padding(2.dp),
     textCallback: (String) -> Unit = {}
 ) {
     var textField by remember { mutableStateOf(TextFieldValue(text)) }
@@ -127,7 +131,7 @@ fun InputTextField(
         KeyboardOptions(imeAction = ImeAction.Default, keyboardType = keyboardType)
     }
 
-    TextField(
+    OutlinedTextField(
         value = textField,
         onValueChange = {
             textField = it
