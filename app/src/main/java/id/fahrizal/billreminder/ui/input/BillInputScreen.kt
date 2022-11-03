@@ -20,17 +20,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
+import id.fahrizal.billreminder.ui.theme.Green40
 
 @Composable
 fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
     val context = LocalContext.current
     val bill: Bill by remember { mutableStateOf(Bill()) }
+    var dateInMounth: Int by remember { mutableStateOf(bill.dayInMonth) }
 
     BillReminderTheme {
         Column(
@@ -75,7 +78,12 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
 
             NumberSelector(onItemClick = { index ->
                 bill.dayInMonth = index + 1
+                dateInMounth = bill.dayInMonth
             })
+
+            TextInfo(
+                text = stringResource(id = R.string.bill_reminder_info, dateInMounth)
+            )
 
             SaveButton {
                 billInputViewModel.save(bill)
@@ -179,6 +187,19 @@ fun DataGrid(
             }
         }
     }
+}
+
+@Composable
+fun TextInfo(text: String) {
+    Text(
+        text = text,
+        color = Green40,
+        fontSize = MaterialTheme.typography.subtitle1.fontSize,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Composable

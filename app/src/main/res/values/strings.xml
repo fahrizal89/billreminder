@@ -9,6 +9,7 @@
     <string name="amount_hint">0</string>
     <string name="bill_name_hint" >Ex: Electricity, Car, Insurance, etc</string>
     <string name="reminder_date_label">Reminder Date (monthly) at</string>
+    <string name="bill_reminder_info">You will be notified every month on day %s at 08.00 AM</string>
 
     <string name="date">Date</string>
     <string name="notification_message">%s Need to pay today!</string>
