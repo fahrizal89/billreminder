@@ -33,10 +33,8 @@ class SaveBill @Inject constructor(
         for (i: Int in 0 until (year * 12)) {
             val time = DateUtil.plusMonth(firstReminder.time, i)
             val body = context.getString(
-                R.string.notification_message,
-                bill.dayInMonth.toString() + " " + bill.name + " " + CurrencyUtil.getRupiahAmount(
-                    bill.amount
-                )
+                R.string.bill_notification_message,
+                bill.name + " " + CurrencyUtil.getRupiahAmount(bill.amount)
             )
             Timber.d("fahrizal SaveBill at " + DateUtil.getTimeInString(time))
             val reminder = Reminder(billId, body, time)
