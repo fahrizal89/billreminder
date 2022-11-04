@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
@@ -92,18 +93,21 @@ fun BillHeader() {
         Column(Modifier.weight(1f)) {
             Text(
                 text = stringResource(id = R.string.date),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 14.dp),
             )
         }
         Column(Modifier.weight(2f)) {
             Text(
                 text = stringResource(id = R.string.bill_name),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 14.dp)
             )
         }
         Column(Modifier.weight(2f)) {
             Text(
                 text = stringResource(id = R.string.amount),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 14.dp)
             )
         }
