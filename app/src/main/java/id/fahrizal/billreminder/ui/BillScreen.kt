@@ -52,7 +52,11 @@ fun BillTable(bills: List<Bill> = ArrayList()) {
 
 @Composable
 fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
-    LazyColumn(modifier = modifier.fillMaxWidth()) {
+    LazyColumn(
+        modifier = modifier
+            .padding(bottom = 73.dp)
+            .fillMaxWidth()
+    ) {
         items(bills) { bill ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -109,6 +113,7 @@ fun BillHeader() {
 @Composable
 fun AddButton(onClick: () -> Unit) {
     Column(verticalArrangement = Arrangement.Bottom) {
+        Divider()
         Button(
             onClick,
             elevation = ButtonDefaults.elevation(
