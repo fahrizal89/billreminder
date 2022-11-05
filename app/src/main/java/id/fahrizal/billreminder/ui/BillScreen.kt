@@ -3,6 +3,7 @@ package id.fahrizal.billreminder.ui
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +55,7 @@ fun BillTable(bills: List<Bill> = ArrayList()) {
 
 @Composable
 fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
+    val context = LocalContext.current
     LazyColumn(
         modifier = modifier
             .padding(bottom = 73.dp)
@@ -61,7 +64,14 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
         items(bills) { bill ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = {
+                            val intent = BillInputActivity.createIntent(context)
+                            context.startActivity(intent)
+                        })
+                    }
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
