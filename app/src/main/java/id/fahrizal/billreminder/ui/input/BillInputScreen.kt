@@ -1,6 +1,5 @@
 package id.fahrizal.billreminder.ui.input
 
-import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -26,78 +24,108 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.ui.input.BillInputViewModel.BillInputUiState
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 import id.fahrizal.billreminder.ui.theme.Green40
 
 @Composable
 fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
-    val context = LocalContext.current
     val bill: Bill by remember { mutableStateOf(Bill()) }
-    var dateInMounth: Int by remember { mutableStateOf(bill.dayInMonth) }
-
     BillReminderTheme {
         Column(
             modifier = Modifier
                 .padding(4.dp)
                 .animateContentSize()
         ) {
-            Text(
-                text = stringResource(id = R.string.add_new_bill),
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                style = MaterialTheme.typography.h5,
-            )
-
-            InputTextField(
-                labelResource = R.string.bill_name,
-                hintResource = R.string.bill_name_hint,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
-            ) { billName ->
-                bill.name = billName
-            }
-
-            InputTextField(
-                labelResource = R.string.amount,
-                hintResource = R.string.amount_hint,
-                singleLine = true,
-                keyboardType = KeyboardType.Number,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
-            ) { inputedAmount ->
-                if (inputedAmount.isNotEmpty() && inputedAmount.isDigitsOnly()) {
-                    bill.amount = inputedAmount.toDouble()
+            val state = billInputViewModel.uiState.collectAsState().value
+            when (state) {
+                is BillInputUiState.Create -> {
+                    InputForm(bill)
+                    WideButton(R.string.save) { billInputViewModel.save(bill) }
                 }
-            }
 
-            Text(
-                text = stringResource(id = R.string.reminder_date_label),
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-            )
+                is BillInputUiState.Read -> {
+                    InputForm(state.bill)
+                    WideButton(R.string.edit) { billInputViewModel.save(state.bill) }
+                }
 
-            NumberSelector(onItemClick = { index ->
-                bill.dayInMonth = index + 1
-                dateInMounth = bill.dayInMonth
-            })
+                is BillInputUiState.Delete -> {
+                    InputForm(state.bill)
+                    WideButton(R.string.delete) { billInputViewModel.save(state.bill) }
+                }
 
-            TextInfo(
-                text = stringResource(id = R.string.bill_reminder_info, dateInMounth)
-            )
+                is BillInputUiState.Error -> {
+                    InputForm(bill)
+                    WideButton(R.string.save) { billInputViewModel.save(bill) }
+                }
 
-            SaveButton {
-                billInputViewModel.save(bill)
-                (context as Activity).finish()
+                is BillInputUiState.Loading -> {
+                    InputForm(bill)
+                    WideButton(R.string.save) { billInputViewModel.save(bill) }
+                }
             }
         }
     }
 }
 
+@Composable
+fun InputForm(bill: Bill) {
+    var dateInMounth: Int by remember { mutableStateOf(bill.dayInMonth) }
+    Text(
+        text = stringResource(id = R.string.add_new_bill),
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        style = MaterialTheme.typography.h5,
+    )
+
+    InputTextField(
+        labelResource = R.string.bill_name,
+        hintResource = R.string.bill_name_hint,
+        text = bill.name,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 16.dp)
+    ) { billName ->
+        bill.name = billName
+    }
+
+    InputTextField(
+        labelResource = R.string.amount,
+        hintResource = R.string.amount_hint,
+        text = if (bill.amount == 0.0) "" else bill.amount.toInt().toString(),
+        singleLine = true,
+        keyboardType = KeyboardType.Number,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 16.dp)
+    ) { inputedAmount ->
+        if (inputedAmount.isNotEmpty() && inputedAmount.isDigitsOnly()) {
+            bill.amount = inputedAmount.toDouble()
+        }
+    }
+
+    Text(
+        text = stringResource(id = R.string.reminder_date_label),
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+    )
+
+    NumberSelector(defaultValue = bill.dayInMonth, onItemClick = { index ->
+        bill.dayInMonth = index + 1
+        dateInMounth = bill.dayInMonth
+    })
+
+    TextInfo(
+        text = stringResource(id = R.string.bill_reminder_info, dateInMounth)
+    )
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun NumberSelector(onItemClick: (index: Int) -> Unit) {
+fun NumberSelector(
+    defaultValue: Int = Bill.DEFAULT_DAY_IN_MONTH,
+    onItemClick: (index: Int) -> Unit
+) {
     var isExpanded by remember { mutableStateOf(false) }
-    var currentNumber by remember { mutableStateOf(Bill.DEFAULT_DAY_IN_MONTH) }
+    var currentNumber by remember { mutableStateOf(defaultValue) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (isExpanded) {
@@ -203,7 +231,7 @@ fun TextInfo(text: String) {
 }
 
 @Composable
-fun SaveButton(onClick: () -> Unit) {
+fun WideButton(resId: Int, onClick: () -> Unit) {
     Column(verticalArrangement = Arrangement.Bottom) {
         Button(
             onClick,
@@ -216,7 +244,7 @@ fun SaveButton(onClick: () -> Unit) {
                 .padding(8.dp, 16.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.save))
+            Text(text = stringResource(id = resId))
         }
     }
 }

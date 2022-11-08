@@ -68,7 +68,7 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
                     .padding(8.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(onTap = {
-                            val intent = BillInputActivity.createIntent(context)
+                            val intent = BillInputActivity.createIntent(context, bill)
                             context.startActivity(intent)
                         })
                     }

@@ -2,6 +2,8 @@
     <string name="app_name">BillReminder</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
     <string name="add_new_bill">Add new Bill</string>
     <string name="bill_name" >Bill Name</string>
