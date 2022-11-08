@@ -81,9 +81,6 @@ fun InputForm(bill: Bill) {
         labelResource = R.string.bill_name,
         hintResource = R.string.bill_name_hint,
         text = bill.name,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 16.dp)
     ) { billName ->
         bill.name = billName
     }
@@ -94,9 +91,6 @@ fun InputForm(bill: Bill) {
         text = if (bill.amount == 0.0) "" else bill.amount.toInt().toString(),
         singleLine = true,
         keyboardType = KeyboardType.Number,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 16.dp)
     ) { inputedAmount ->
         if (inputedAmount.isNotEmpty() && inputedAmount.isDigitsOnly()) {
             bill.amount = inputedAmount.toDouble()
