@@ -40,17 +40,21 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
             val state = billInputViewModel.uiState.collectAsState().value
             when (state) {
                 is BillInputUiState.Create -> {
-                    InputForm(bill)
+                    InputForm(bill = bill, titleResId = R.string.add_new_bill)
                     WideButton(R.string.save) { billInputViewModel.save(bill) }
                 }
 
                 is BillInputUiState.Read -> {
-                    InputForm(state.bill)
+                    InputForm(state.bill, false)
                     WideButton(R.string.edit) { billInputViewModel.save(state.bill) }
                 }
 
                 is BillInputUiState.Delete -> {
-                    InputForm(state.bill)
+                    InputForm(
+                        bill = state.bill,
+                        editable = false,
+                        titleResId = R.string.delete_bill
+                    )
                     WideButton(R.string.delete) { billInputViewModel.save(state.bill) }
                 }
 
@@ -69,10 +73,10 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
 }
 
 @Composable
-fun InputForm(bill: Bill) {
+fun InputForm(bill: Bill, editable: Boolean = true, titleResId: Int = R.string.bill) {
     var dateInMounth: Int by remember { mutableStateOf(bill.dayInMonth) }
     Text(
-        text = stringResource(id = R.string.add_new_bill),
+        text = stringResource(titleResId),
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         style = MaterialTheme.typography.h5,
     )
@@ -81,6 +85,7 @@ fun InputForm(bill: Bill) {
         labelResource = R.string.bill_name,
         hintResource = R.string.bill_name_hint,
         text = bill.name,
+        enabled = editable
     ) { billName ->
         bill.name = billName
     }
@@ -91,6 +96,7 @@ fun InputForm(bill: Bill) {
         text = if (bill.amount == 0.0) "" else bill.amount.toInt().toString(),
         singleLine = true,
         keyboardType = KeyboardType.Number,
+        enabled = editable
     ) { inputedAmount ->
         if (inputedAmount.isNotEmpty() && inputedAmount.isDigitsOnly()) {
             bill.amount = inputedAmount.toDouble()
@@ -102,10 +108,13 @@ fun InputForm(bill: Bill) {
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
     )
 
-    NumberSelector(defaultValue = bill.dayInMonth, onItemClick = { index ->
-        bill.dayInMonth = index + 1
-        dateInMounth = bill.dayInMonth
-    })
+    NumberSelector(
+        defaultValue = bill.dayInMonth,
+        enabled = editable,
+        onItemClick = { index ->
+            bill.dayInMonth = index + 1
+            dateInMounth = bill.dayInMonth
+        })
 
     TextInfo(
         text = stringResource(id = R.string.bill_reminder_info, dateInMounth)
@@ -116,6 +125,7 @@ fun InputForm(bill: Bill) {
 @Composable
 fun NumberSelector(
     defaultValue: Int = Bill.DEFAULT_DAY_IN_MONTH,
+    enabled: Boolean = true,
     onItemClick: (index: Int) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -132,7 +142,7 @@ fun NumberSelector(
         }
 
     } else {
-        Button(onClick = {
+        Button(enabled = enabled, onClick = {
             keyboardController?.hide()
             isExpanded = true
         }, modifier = Modifier.padding(8.dp)) {
@@ -149,6 +159,7 @@ fun InputTextField(
     text: String = "",
     singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .padding(2.dp),
@@ -171,6 +182,7 @@ fun InputTextField(
         placeholder = { Text(stringResource(hintResource)) },
         singleLine = singleLine,
         keyboardOptions = keyboardOptions,
+        enabled = enabled,
         modifier = modifier
     )
 }

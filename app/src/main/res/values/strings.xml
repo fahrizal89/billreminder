@@ -5,7 +5,9 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
 
+    <string name="bill">Bill</string>
     <string name="add_new_bill">Add new Bill</string>
+    <string name="delete_bill">Delete Bill</string>
     <string name="bill_name" >Bill Name</string>
     <string name="amount" >Amount</string>
     <string name="amount_hint">0</string>
