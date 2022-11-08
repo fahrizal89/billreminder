@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,9 +43,13 @@ class BillInputViewModel @Inject constructor(
 
     private fun setStateAsEdit(billId: Long) {
         viewModelScope.launch(ioCoroutineDispatcher) {
-            //TODO temporary invoke from index 0, need to adjust use case to getting 1 object
-            val bill = getBills.invoke()[0]
-            _uiState.value = BillInputUiState.Read(bill)
+            try {
+                val bill = getBills(billId)[0]
+                _uiState.value = BillInputUiState.Read(bill)
+            } catch (e: Exception) {
+                Timber.e(e)
+                _uiState.value = BillInputUiState.Error(R.string.error)
+            }
         }
     }
 

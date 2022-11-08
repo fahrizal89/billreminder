@@ -5,5 +5,5 @@ import id.fahrizal.billreminder.data.model.Bill
 interface BillEntityData {
 
     suspend fun save(bill: Bill)  : Long
-    suspend fun get(): List<Bill>
+    suspend fun get(billId:Long?): List<Bill>
 }
