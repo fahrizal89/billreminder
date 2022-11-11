@@ -1,5 +1,6 @@
 package id.fahrizal.billreminder.ui.input
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -30,6 +32,7 @@ import id.fahrizal.billreminder.ui.theme.Green40
 
 @Composable
 fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
+    val activity: Activity = LocalContext.current as Activity
     val bill: Bill by remember { mutableStateOf(Bill()) }
     BillReminderTheme {
         Column(
@@ -67,6 +70,9 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
                     InputForm(bill)
                     WideButton(R.string.save) { billInputViewModel.save(bill) }
                 }
+
+                is BillInputUiState.Finish -> activity.finish()
+
             }
         }
     }

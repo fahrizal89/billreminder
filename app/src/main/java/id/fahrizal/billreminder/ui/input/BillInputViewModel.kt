@@ -38,6 +38,7 @@ class BillInputViewModel @Inject constructor(
     fun save(bill: Bill) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             saveBill(bill)
+            _uiState.value = BillInputUiState.Finish
         }
     }
 
@@ -58,6 +59,7 @@ class BillInputViewModel @Inject constructor(
         object Create : BillInputUiState()
         class Read(val bill: Bill) : BillInputUiState()
         class Delete(val bill: Bill) : BillInputUiState()
+        object Finish : BillInputUiState()
         class Error(@StringRes val stringRes: Int = R.string.error) : BillInputUiState()
     }
 }
