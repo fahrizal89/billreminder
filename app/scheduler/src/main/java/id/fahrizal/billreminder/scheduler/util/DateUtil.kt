@@ -36,7 +36,21 @@ object DateUtil {
         }
     }
 
+
+    fun plusDay(time: Long, day: Int): Long {
+        Calendar.getInstance().apply {
+            timeInMillis = time
+            set(Calendar.MONTH, getMonth(getTime()))
+            set(Calendar.DAY_OF_MONTH, getDay(Date()) + day)
+            return this.time.time
+        }
+    }
+
     fun getMonth(date: Date): Int = SimpleDateFormat("MM", Locale.US).format(date).toInt() - 1
+
+    fun getDay(date: Date): Int = SimpleDateFormat("dd", Locale.US).format(date).toInt()
+
+    fun getYear(date: Date): Int = SimpleDateFormat("dd", Locale.US).format(date).toInt()
 
     fun getTimeInString(time: Long) : String {
         return Date(time).toString()
