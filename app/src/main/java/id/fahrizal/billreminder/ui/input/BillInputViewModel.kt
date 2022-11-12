@@ -42,6 +42,12 @@ class BillInputViewModel @Inject constructor(
         }
     }
 
+    fun edit(bill: Bill) {
+        viewModelScope.launch(ioCoroutineDispatcher) {
+            _uiState.value = BillInputUiState.Edit(bill)
+        }
+    }
+
     private fun setStateAsEdit(billId: Long) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             try {
@@ -58,6 +64,7 @@ class BillInputViewModel @Inject constructor(
         object Loading : BillInputUiState()
         object Create : BillInputUiState()
         class Read(val bill: Bill) : BillInputUiState()
+        class Edit(val bill: Bill) : BillInputUiState()
         class Delete(val bill: Bill) : BillInputUiState()
         object Finish : BillInputUiState()
         class Error(@StringRes val stringRes: Int = R.string.error) : BillInputUiState()

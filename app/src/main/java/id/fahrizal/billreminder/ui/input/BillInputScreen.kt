@@ -49,7 +49,12 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
 
                 is BillInputUiState.Read -> {
                     InputForm(state.bill, false)
-                    WideButton(R.string.edit) { billInputViewModel.save(state.bill) }
+                    WideButton(R.string.edit) { billInputViewModel.edit(state.bill) }
+                }
+
+                is BillInputUiState.Edit -> {
+                    InputForm(bill = state.bill, titleResId = R.string.add_new_bill)
+                    WideButton(R.string.save) { billInputViewModel.save(state.bill) }
                 }
 
                 is BillInputUiState.Delete -> {
@@ -72,7 +77,6 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
                 }
 
                 is BillInputUiState.Finish -> activity.finish()
-
             }
         }
     }
