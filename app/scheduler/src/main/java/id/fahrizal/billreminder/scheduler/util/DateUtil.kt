@@ -41,7 +41,7 @@ object DateUtil {
         Calendar.getInstance().apply {
             timeInMillis = time
             set(Calendar.MONTH, getMonth(getTime()))
-            set(Calendar.DAY_OF_MONTH, getDay(Date()) + day)
+            set(Calendar.DAY_OF_MONTH, getDay(Date(time)) + day)
             return this.time.time
         }
     }
