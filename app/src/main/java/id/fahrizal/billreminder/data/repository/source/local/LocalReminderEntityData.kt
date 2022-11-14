@@ -29,8 +29,8 @@ class LocalReminderEntityData @Inject constructor(
         val title = context.getString(R.string.app_name)
 
         for (reminder in billDetails) {
-            Timber.d("fahrizal notify at " + DateUtil.getTimeInString(reminder.paymentDate) + ", id: "+ reminder.id)
-            SchedulerManager.set(context, reminder.paymentDate, title, reminder.message, reminder.id ?: 0)
+            Timber.d("fahrizal notify at " + DateUtil.getTimeInString(reminder.notifDate) + ", id: "+ reminder.id)
+            SchedulerManager.set(context, reminder.notifDate, title, reminder.message, reminder.id ?: 0)
         }
     }
 }

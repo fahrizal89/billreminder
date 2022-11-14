@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class BillDetail(
     val billId: Long,
     val message: String,
-    val paymentDate: Long,
+    val notifDate: Long,
+    val isPaid :Boolean = false,
     @PrimaryKey val id: Int? = null
 )
