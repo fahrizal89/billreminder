@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import id.fahrizal.billreminder.data.dao.BillDao
-import id.fahrizal.billreminder.data.dao.ReminderDao
+import id.fahrizal.billreminder.data.dao.BillDetailDao
 import id.fahrizal.billreminder.data.db.AppDatabase
 import id.fahrizal.billreminder.data.db.AppRoomDatabase
 
@@ -24,7 +24,7 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideReminderDao(appRoomDatabase: AppRoomDatabase): ReminderDao {
+    fun provideReminderDao(appRoomDatabase: AppRoomDatabase): BillDetailDao {
         return appRoomDatabase.reminderDao()
     }
 }

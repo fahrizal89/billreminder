@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
-import id.fahrizal.billreminder.data.model.Reminder
+import id.fahrizal.billreminder.data.model.BillDetail
 import id.fahrizal.billreminder.data.repository.BillRepository
 import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.util.CurrencyUtil
@@ -18,16 +18,16 @@ class SaveBill @Inject constructor(
 
     suspend operator fun invoke(bill: Bill) {
         val id = billRepository.save(bill)
-        val reminders = generateReminderInYear(id, bill)
-        billRepository.saveReminders(reminders)
+        val billDetails = generateBillDetails(id, bill)
+        billRepository.save(billDetails)
     }
 
-    private fun generateReminderInYear(
+    private fun generateBillDetails(
         billId: Long,
         bill: Bill,
         year: Int = 1
-    ): ArrayList<Reminder> {
-        val reminders = ArrayList<Reminder>()
+    ): ArrayList<BillDetail> {
+        val billDetails = ArrayList<BillDetail>()
         val firstReminder =
             DateUtil.getDate(NOTIFY_HOUR, NOTIFY_MINUTE, NOTIFY_SECOND, bill.dayInMonth)
         for (i: Int in 0 until (year * 12)) {
@@ -36,12 +36,12 @@ class SaveBill @Inject constructor(
                 R.string.bill_notification_message,
                 bill.name + " " + CurrencyUtil.getRupiahAmount(bill.amount)
             )
-            Timber.d("fahrizal SaveBill at " + DateUtil.getTimeInString(time))
-            val reminder = Reminder(billId, body, time)
-            reminders.add(reminder)
+            Timber.d("Save BillDetail at " + DateUtil.getTimeInString(time))
+            val billDetail = BillDetail(billId, body, time)
+            billDetails.add(billDetail)
         }
 
-        return reminders
+        return billDetails
     }
 
     companion object {

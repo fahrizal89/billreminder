@@ -9,6 +9,6 @@ class GetBills @Inject constructor(
 ) {
 
     suspend operator fun invoke(billId: Long? = null): List<Bill> {
-        return billRepository.get(billId)
+        return billRepository.getBills(billId)
     }
 }

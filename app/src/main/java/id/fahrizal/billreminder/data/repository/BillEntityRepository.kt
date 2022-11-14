@@ -1,7 +1,7 @@
 package id.fahrizal.billreminder.data.repository
 
 import id.fahrizal.billreminder.data.model.Bill
-import id.fahrizal.billreminder.data.model.Reminder
+import id.fahrizal.billreminder.data.model.BillDetail
 import id.fahrizal.billreminder.data.repository.source.BillEntityData
 import id.fahrizal.billreminder.data.repository.source.ReminderEntityData
 import javax.inject.Inject
@@ -15,17 +15,17 @@ class BillEntityRepository @Inject constructor(
         return billEntityData.save(bill)
     }
 
-    override suspend fun get(billId:Long?): List<Bill> {
+    override suspend fun getBills(billId:Long?): List<Bill> {
         return billEntityData.get(billId)
     }
 
-    override suspend fun saveReminders(reminders: List<Reminder>) {
-        reminderEntityData.saveReminders(reminders)
-        val savedReminder = reminderEntityData.getReminders(reminders[0].billId.toInt())
+    override suspend fun save(billDetails: List<BillDetail>) {
+        reminderEntityData.saveBillDetails(billDetails)
+        val savedReminder = reminderEntityData.getBillDetails(billDetails[0].billId.toInt())
         reminderEntityData.setReminderNotification(savedReminder)
     }
 
-    override suspend fun getReminders(): List<Reminder> {
-        return reminderEntityData.getReminders()
+    override suspend fun getBillDetails(billId:Long): List<BillDetail> {
+        return reminderEntityData.getBillDetails()
     }
 }
