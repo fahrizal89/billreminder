@@ -36,7 +36,6 @@ object DateUtil {
         }
     }
 
-
     fun plusDay(time: Long, day: Int): Long {
         Calendar.getInstance().apply {
             timeInMillis = time
@@ -46,7 +45,7 @@ object DateUtil {
         }
     }
 
-    fun getLasyDayInMonth(date: Date) : Long{
+    fun getLasyDayInMonth(date: Date): Long {
         Calendar.getInstance().apply {
             timeInMillis = plusMonth(date.time, 1)
             set(Calendar.DAY_OF_MONTH, 1)
@@ -64,7 +63,9 @@ object DateUtil {
 
     fun getYear(date: Date): Int = SimpleDateFormat("dd", Locale.US).format(date).toInt()
 
-    fun getTimeInString(time: Long) : String {
+    fun getTimeInString(time: Long): String {
         return Date(time).toString()
     }
+
+    fun getDateString(time: Long): String = SimpleDateFormat("dd/MM/yy", Locale.US).format(Date(time))
 }

@@ -19,7 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
-import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.data.model.BillInfo
+import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 import id.fahrizal.billreminder.util.CurrencyUtil
@@ -45,7 +46,7 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun BillTable(bills: List<Bill> = ArrayList()) {
+fun BillTable(bills: List<BillInfo> = ArrayList()) {
     Column {
         BillHeader()
         Divider(modifier = Modifier.padding(4.dp))
@@ -54,7 +55,7 @@ fun BillTable(bills: List<Bill> = ArrayList()) {
 }
 
 @Composable
-fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
+fun BillList(bills: List<BillInfo> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
     val context = LocalContext.current
     LazyColumn(
         modifier = modifier
@@ -68,15 +69,15 @@ fun BillList(bills: List<Bill> = ArrayList(), modifier: Modifier = Modifier.padd
                     .padding(8.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(onTap = {
-                            val intent = BillInputActivity.createIntent(context, bill)
+                            val intent = BillInputActivity.createIntent(context, bill.billId)
                             context.startActivity(intent)
                         })
                     }
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = bill.dayInMonth.toString(),
-                        modifier = Modifier.padding(horizontal = 14.dp)
+                        text = DateUtil.getDateString(bill.notifDate),
+                        fontSize = MaterialTheme.typography.subtitle2.fontSize,
                     )
                 }
                 Column(Modifier.weight(2f)) {

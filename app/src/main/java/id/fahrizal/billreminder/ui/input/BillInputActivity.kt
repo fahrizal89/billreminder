@@ -24,9 +24,9 @@ class BillInputActivity : ComponentActivity() {
 
         const val BILL_ID = "BILL_ID"
 
-        fun createIntent(context: Context, bill: Bill = Bill()): Intent {
+        fun createIntent(context: Context, billId: Long): Intent {
             val intent = Intent(context, BillInputActivity::class.java)
-            intent.putExtra(BILL_ID, bill.id)
+            intent.putExtra(BILL_ID, billId)
             return intent
         }
     }
