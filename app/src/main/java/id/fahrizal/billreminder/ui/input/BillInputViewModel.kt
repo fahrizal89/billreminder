@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.domain.usecase.GetBills
+import id.fahrizal.billreminder.domain.usecase.GetUnpaidBillInfo
 import id.fahrizal.billreminder.domain.usecase.SaveBill
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,8 @@ class BillInputViewModel @Inject constructor(
     private val ioCoroutineDispatcher: CoroutineDispatcher,
     savedStateHandle: SavedStateHandle,
     private val saveBill: SaveBill,
-    private val getBills: GetBills
+    private val getBills: GetBills,
+    private val getUnpaidBillInfo: GetUnpaidBillInfo
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BillInputUiState>(BillInputUiState.Loading)
@@ -53,6 +55,8 @@ class BillInputViewModel @Inject constructor(
             try {
                 val bill = getBills(billId)[0]
                 _uiState.value = BillInputUiState.Read(bill)
+
+                getUnpaidBillInfo.invoke()
             } catch (e: Exception) {
                 Timber.e(e)
                 _uiState.value = BillInputUiState.Error(R.string.error)

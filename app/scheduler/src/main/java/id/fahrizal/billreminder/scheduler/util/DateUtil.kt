@@ -46,6 +46,18 @@ object DateUtil {
         }
     }
 
+    fun getLasyDayInMonth(date: Date) : Long{
+        Calendar.getInstance().apply {
+            timeInMillis = plusMonth(date.time, 1)
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 0)
+            add(Calendar.DATE, -1)
+            return this.time.time
+        }
+    }
+
     fun getMonth(date: Date): Int = SimpleDateFormat("MM", Locale.US).format(date).toInt() - 1
 
     fun getDay(date: Date): Int = SimpleDateFormat("dd", Locale.US).format(date).toInt()
