@@ -8,7 +8,7 @@ class GetUnpaidBillInfo @Inject constructor(
     private val billRepository: BillRepository
 ) {
 
-    suspend operator fun invoke(): List<BillInfo> {
-        return billRepository.getUnpaidBill()
+    suspend operator fun invoke(billId: Long? = null): List<BillInfo> {
+        return billRepository.getUnpaidBill(billId)
     }
 }

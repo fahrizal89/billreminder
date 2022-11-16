@@ -22,10 +22,10 @@ class LocalBillEntityData @Inject constructor(
         return billDao.getBills(billParam)
     }
 
-    override suspend fun getUnpaidBill(): List<BillInfo> {
+    override suspend fun getUnpaidBill(billId: Long?): List<BillInfo> {
         val lastDateOfMonth = DateUtil.getLasyDayInMonth(Date())
         Timber.d("getUnpaidBill lastDateOfMonth: " + DateUtil.getTimeInString(lastDateOfMonth)+", ms: "+lastDateOfMonth)
-
-        return billDao.getBillInfo(lastDateOfMonth)
+        val billIdParam = billId?.toString() ?: "%"
+        return billDao.getBillInfo(lastDateOfMonth, billIdParam)
     }
 }

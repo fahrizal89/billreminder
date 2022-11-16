@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.data.model.BillInfo
 import id.fahrizal.billreminder.domain.usecase.GetBills
 import id.fahrizal.billreminder.domain.usecase.GetUnpaidBillInfo
 import id.fahrizal.billreminder.domain.usecase.SaveBill
+import id.fahrizal.billreminder.ui.input.mapper.BillInfoMapper.toBill
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +35,7 @@ class BillInputViewModel @Inject constructor(
         val billId: Long? = savedStateHandle.get<Long>(BillInputActivity.BILL_ID)
         when (billId) {
             null -> _uiState.value = BillInputUiState.Create
-            else -> setStateAsEdit(billId)
+            else -> setUiStateAsRead(billId)
         }
     }
 
@@ -44,19 +46,17 @@ class BillInputViewModel @Inject constructor(
         }
     }
 
-    fun edit(bill: Bill) {
+    fun edit(billInfo: BillInfo) {
         viewModelScope.launch(ioCoroutineDispatcher) {
-            _uiState.value = BillInputUiState.Edit(bill)
+            _uiState.value = BillInputUiState.Edit(billInfo.toBill())
         }
     }
 
-    private fun setStateAsEdit(billId: Long) {
+    private fun setUiStateAsRead(billId: Long) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             try {
-                val bill = getBills(billId)[0]
-                _uiState.value = BillInputUiState.Read(bill)
-
-                getUnpaidBillInfo.invoke()
+                val billInfo = getUnpaidBillInfo(billId)[0]
+                _uiState.value = BillInputUiState.Read(billInfo)
             } catch (e: Exception) {
                 Timber.e(e)
                 _uiState.value = BillInputUiState.Error(R.string.error)
@@ -67,7 +67,7 @@ class BillInputViewModel @Inject constructor(
     sealed class BillInputUiState {
         object Loading : BillInputUiState()
         object Create : BillInputUiState()
-        class Read(val bill: Bill) : BillInputUiState()
+        class Read(val billInfo: BillInfo) : BillInputUiState()
         class Edit(val bill: Bill) : BillInputUiState()
         class Delete(val bill: Bill) : BillInputUiState()
         object Finish : BillInputUiState()

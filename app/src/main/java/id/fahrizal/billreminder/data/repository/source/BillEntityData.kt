@@ -7,5 +7,5 @@ interface BillEntityData {
 
     suspend fun save(bill: Bill): Long
     suspend fun get(billId: Long?): List<Bill>
-    suspend fun getUnpaidBill(): List<BillInfo>
+    suspend fun getUnpaidBill(billId: Long?): List<BillInfo>
 }

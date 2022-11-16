@@ -48,8 +48,7 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
                 }
 
                 is BillInputUiState.Read -> {
-                    InputForm(state.bill, false)
-                    WideButton(R.string.edit) { billInputViewModel.edit(state.bill) }
+                    BillDetailScreen(billInputViewModel, state.billInfo)
                 }
 
                 is BillInputUiState.Edit -> {
