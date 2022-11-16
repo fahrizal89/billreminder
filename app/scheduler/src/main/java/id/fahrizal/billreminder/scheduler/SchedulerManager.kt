@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.activity.ComponentActivity
-import id.fahrizal.billreminder.scheduler.util.DateUtil
 import timber.log.Timber
 
 object SchedulerManager {
@@ -23,16 +22,24 @@ object SchedulerManager {
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra(TITLE, title)
         intent.putExtra(CONTENT, content)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE
-        )
-
         val alarmManager = context.getSystemService(ComponentActivity.ALARM_SERVICE) as AlarmManager
+
         alarmManager.set(
             AlarmManager.RTC_WAKEUP,
             time,
-            pendingIntent
+            getPendingIntent(context, requestCode, intent)
         )
+    }
+
+    fun cancel(context: Context, requestCode: Int) {
+        try {
+            val intent = Intent(context, AlarmReceiver::class.java)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            alarmManager.cancel(getPendingIntent(context, requestCode, intent))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun checkAlarmsAccess(context: Context): Boolean {
@@ -40,5 +47,19 @@ object SchedulerManager {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager?
         return alarmManager?.canScheduleExactAlarms() == true
+    }
+
+    private fun getPendingIntent(
+        context: Context,
+        requestCode: Int,
+        intent: Intent,
+        flag: Int = PendingIntent.FLAG_IMMUTABLE
+    ): PendingIntent {
+        return PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            flag
+        )
     }
 }

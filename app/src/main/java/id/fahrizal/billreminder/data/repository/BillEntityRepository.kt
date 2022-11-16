@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class BillEntityRepository @Inject constructor(
     private val billEntityData: BillEntityData,
-    private val reminderEntityData: ReminderEntityData
+    private val reminderEntityData: ReminderEntityData,
 ) : BillRepository {
 
     override suspend fun save(bill: Bill): Long {
@@ -21,8 +21,20 @@ class BillEntityRepository @Inject constructor(
     }
 
     override suspend fun save(billDetails: List<BillDetail>) {
+        val existingBillDetails = reminderEntityData.getBillDetails(billDetails[0].billId)
+
+        //remove existing bill details and their notification scheduler when exist
+        if (existingBillDetails.isNotEmpty()) {
+            delete(existingBillDetails)
+            removeReminder(existingBillDetails)
+        }
+
+        //save to db
+        val billId = billDetails[0].billId
         reminderEntityData.saveBillDetails(billDetails)
-        val savedReminder = reminderEntityData.getBillDetails(billDetails[0].billId.toInt())
+
+        //set notifications
+        val savedReminder = reminderEntityData.getBillDetails(billId)
         reminderEntityData.setReminderNotification(savedReminder)
     }
 
@@ -32,5 +44,13 @@ class BillEntityRepository @Inject constructor(
 
     override suspend fun getUnpaidBill(): List<BillInfo> {
         return billEntityData.getUnpaidBill()
+    }
+
+    override suspend fun delete(billDetails: List<BillDetail>) {
+        reminderEntityData.delete(billDetails)
+    }
+
+    private suspend fun removeReminder(billDetails: List<BillDetail>) {
+        reminderEntityData.removeReminderNotification(billDetails)
     }
 }

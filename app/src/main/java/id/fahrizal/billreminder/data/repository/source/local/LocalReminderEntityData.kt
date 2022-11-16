@@ -20,7 +20,11 @@ class LocalReminderEntityData @Inject constructor(
         return billDetailDao.insert(billDetails)
     }
 
-    override suspend fun getBillDetails(billId:Int?): List<BillDetail> {
+    override suspend fun delete(billDetails: List<BillDetail>) {
+        billDetailDao.delete(billDetails)
+    }
+
+    override suspend fun getBillDetails(billId: Long?): List<BillDetail> {
         val billIdParam = billId?.toString() ?: "%"
         return billDetailDao.get(billIdParam)
     }
@@ -29,8 +33,22 @@ class LocalReminderEntityData @Inject constructor(
         val title = context.getString(R.string.app_name)
 
         for (reminder in billDetails) {
-            Timber.d("fahrizal notify at " + DateUtil.getTimeInString(reminder.notifDate) + ", id: "+ reminder.id)
-            SchedulerManager.set(context, reminder.notifDate, title, reminder.message, reminder.id ?: 0)
+            Timber.d("fahrizal notify at " + DateUtil.getTimeInString(reminder.notifDate) + ", id: " + reminder.id)
+            SchedulerManager.set(
+                context,
+                reminder.notifDate,
+                title,
+                reminder.message,
+                reminder.id ?: 0
+            )
+        }
+    }
+
+    override suspend fun removeReminderNotification(billDetails: List<BillDetail>) {
+        for (billDetail in billDetails) {
+            if (billDetail.id != null) {
+                SchedulerManager.cancel(context, billDetail.id)
+            }
         }
     }
 }

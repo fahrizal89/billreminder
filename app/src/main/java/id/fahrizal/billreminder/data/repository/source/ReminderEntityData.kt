@@ -5,6 +5,8 @@ import id.fahrizal.billreminder.data.model.BillDetail
 interface ReminderEntityData {
 
     suspend fun saveBillDetails(billDetails: List<BillDetail>)
-    suspend fun getBillDetails(billId:Int?=null): List<BillDetail>
+    suspend fun getBillDetails(billId:Long?=null): List<BillDetail>
+    suspend fun delete(billDetails: List<BillDetail>)
     suspend fun setReminderNotification(billDetails: List<BillDetail>)
+    suspend fun removeReminderNotification(billDetails: List<BillDetail>)
 }
