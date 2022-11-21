@@ -17,9 +17,16 @@ class SaveBill @Inject constructor(
 ) {
 
     suspend operator fun invoke(bill: Bill) {
+        //save parent bill
         val id = billRepository.save(bill)
+
+        //save bill details
         val billDetails = generateBillDetails(id, bill)
         billRepository.save(billDetails)
+
+        //save reminder
+        val savedBillDetails = billRepository.getBillDetails(id)
+        billRepository.saveReminder(savedBillDetails)
     }
 
     private fun generateBillDetails(

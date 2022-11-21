@@ -30,12 +30,7 @@ class BillEntityRepository @Inject constructor(
         }
 
         //save to db
-        val billId = billDetails[0].billId
         reminderEntityData.saveBillDetails(billDetails)
-
-        //set notifications
-        val savedReminder = reminderEntityData.getBillDetails(billId)
-        reminderEntityData.setReminderNotification(savedReminder)
     }
 
     override suspend fun getBillDetails(billId: Long): List<BillDetail> {
@@ -48,6 +43,10 @@ class BillEntityRepository @Inject constructor(
 
     override suspend fun delete(billDetails: List<BillDetail>) {
         reminderEntityData.delete(billDetails)
+    }
+
+    override suspend fun saveReminder(billDetails: List<BillDetail>) {
+        return reminderEntityData.setReminderNotification(billDetails)
     }
 
     private suspend fun removeReminder(billDetails: List<BillDetail>) {
