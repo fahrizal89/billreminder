@@ -9,5 +9,5 @@ data class BillDetail(
     val message: String,
     val notifDate: Long,
     val isPaid :Boolean = false,
-    @PrimaryKey val id: Int? = null
+    @PrimaryKey val id: Long? = null
 )

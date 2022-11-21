@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.BillInfo
 import id.fahrizal.billreminder.scheduler.util.DateUtil
+import id.fahrizal.billreminder.ui.input.mapper.BillInfoMapper.toBillDetail
 import id.fahrizal.billreminder.util.CurrencyUtil
 
 @Composable
@@ -84,7 +85,7 @@ fun BillDetailScreen(
 
         Button(
             onClick = {
-
+                billInputViewModel.save(billInfo.toBillDetail())
             },
             elevation = ButtonDefaults.elevation(
                 defaultElevation = 5.dp,

@@ -7,10 +7,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.data.model.BillDetail
 import id.fahrizal.billreminder.data.model.BillInfo
-import id.fahrizal.billreminder.domain.usecase.GetBills
 import id.fahrizal.billreminder.domain.usecase.GetUnpaidBillInfo
 import id.fahrizal.billreminder.domain.usecase.SaveBill
+import id.fahrizal.billreminder.domain.usecase.SaveBillDetail
 import id.fahrizal.billreminder.ui.input.mapper.BillInfoMapper.toBill
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +25,8 @@ class BillInputViewModel @Inject constructor(
     private val ioCoroutineDispatcher: CoroutineDispatcher,
     savedStateHandle: SavedStateHandle,
     private val saveBill: SaveBill,
-    private val getBills: GetBills,
-    private val getUnpaidBillInfo: GetUnpaidBillInfo
+    private val getUnpaidBillInfo: GetUnpaidBillInfo,
+    private val saveBillDetail: SaveBillDetail
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BillInputUiState>(BillInputUiState.Loading)
@@ -49,6 +50,14 @@ class BillInputViewModel @Inject constructor(
     fun edit(billInfo: BillInfo) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             _uiState.value = BillInputUiState.Edit(billInfo.toBill())
+        }
+    }
+
+    fun save(billDetail: BillDetail) {
+        viewModelScope.launch(ioCoroutineDispatcher) {
+            val billDetails = ArrayList<BillDetail>().apply { add(billDetail) }
+            saveBillDetail(billDetails)
+            _uiState.value = BillInputUiState.Finish
         }
     }
 

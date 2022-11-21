@@ -39,7 +39,7 @@ class LocalReminderEntityData @Inject constructor(
                 reminder.notifDate,
                 title,
                 reminder.message,
-                reminder.id ?: 0
+                reminder.id?.toInt() ?: 0
             )
         }
     }
@@ -47,7 +47,7 @@ class LocalReminderEntityData @Inject constructor(
     override suspend fun removeReminderNotification(billDetails: List<BillDetail>) {
         for (billDetail in billDetails) {
             if (billDetail.id != null) {
-                SchedulerManager.cancel(context, billDetail.id)
+                SchedulerManager.cancel(context, billDetail.id.toInt())
             }
         }
     }
