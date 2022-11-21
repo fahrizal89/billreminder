@@ -11,6 +11,6 @@ interface BillRepository {
     suspend fun save(billDetails: List<BillDetail>)
     suspend fun delete(billDetails: List<BillDetail>)
     suspend fun getBillDetails(billId: Long): List<BillDetail>
-    suspend fun getUnpaidBill(billId: Long?): List<BillInfo>
+    suspend fun getBillInfoList(billId: Long?): List<BillInfo>
     suspend fun saveReminder(billDetails: List<BillDetail>)
 }

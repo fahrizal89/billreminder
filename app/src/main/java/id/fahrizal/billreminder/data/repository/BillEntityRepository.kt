@@ -37,8 +37,8 @@ class BillEntityRepository @Inject constructor(
         return reminderEntityData.getBillDetails()
     }
 
-    override suspend fun getUnpaidBill(billId: Long?): List<BillInfo> {
-        return billEntityData.getUnpaidBill(billId)
+    override suspend fun getBillInfoList(billId: Long?): List<BillInfo> {
+        return billEntityData.getBillInfoList(billId)
     }
 
     override suspend fun delete(billDetails: List<BillDetail>) {

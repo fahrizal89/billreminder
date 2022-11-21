@@ -4,11 +4,11 @@ import id.fahrizal.billreminder.data.model.BillInfo
 import id.fahrizal.billreminder.data.repository.BillRepository
 import javax.inject.Inject
 
-class GetUnpaidBillInfo @Inject constructor(
+class GetBillInfo @Inject constructor(
     private val billRepository: BillRepository
 ) {
 
     suspend operator fun invoke(billId: Long? = null): List<BillInfo> {
-        return billRepository.getUnpaidBill(billId)
+        return billRepository.getBillInfoList(billId)
     }
 }

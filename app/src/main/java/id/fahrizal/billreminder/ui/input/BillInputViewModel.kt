@@ -9,7 +9,7 @@ import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.data.model.BillDetail
 import id.fahrizal.billreminder.data.model.BillInfo
-import id.fahrizal.billreminder.domain.usecase.GetUnpaidBillInfo
+import id.fahrizal.billreminder.domain.usecase.GetBillInfo
 import id.fahrizal.billreminder.domain.usecase.SaveBill
 import id.fahrizal.billreminder.domain.usecase.SaveBillDetail
 import id.fahrizal.billreminder.ui.input.mapper.BillInfoMapper.toBill
@@ -25,7 +25,7 @@ class BillInputViewModel @Inject constructor(
     private val ioCoroutineDispatcher: CoroutineDispatcher,
     savedStateHandle: SavedStateHandle,
     private val saveBill: SaveBill,
-    private val getUnpaidBillInfo: GetUnpaidBillInfo,
+    private val getBillInfo: GetBillInfo,
     private val saveBillDetail: SaveBillDetail
 ) : ViewModel() {
 
@@ -64,7 +64,7 @@ class BillInputViewModel @Inject constructor(
     private fun setUiStateAsRead(billId: Long) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             try {
-                val billInfo = getUnpaidBillInfo(billId)[0]
+                val billInfo = getBillInfo(billId)[0]
                 _uiState.value = BillInputUiState.Read(billInfo)
             } catch (e: Exception) {
                 Timber.e(e)
