@@ -76,7 +76,7 @@ fun BillDetailScreen(
         )
 
         Text(
-            text = DateUtil.getTimeInString(billInfo.notifDate),
+            text = DateUtil.getDateString(billInfo.notifDate),
             fontSize = MaterialTheme.typography.body1.fontSize,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
