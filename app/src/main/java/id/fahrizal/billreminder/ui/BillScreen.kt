@@ -52,7 +52,6 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
 @Composable
 fun BillTable(bills: List<BillInfo> = ArrayList()) {
     Column {
-        BillHeader()
         Divider(modifier = Modifier.padding(4.dp))
         BillList(bills)
     }
@@ -116,36 +115,6 @@ fun BillItem(billInfo: BillInfo = BillInfo()) {
                     color = DarkGreen
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun BillHeader() {
-    Row(
-        modifier = Modifier.padding(top = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Column(Modifier.weight(1f)) {
-            Text(
-                text = stringResource(id = R.string.date),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 14.dp),
-            )
-        }
-        Column(Modifier.weight(2f)) {
-            Text(
-                text = stringResource(id = R.string.bill_name),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 14.dp)
-            )
-        }
-        Column(Modifier.weight(2f)) {
-            Text(
-                text = stringResource(id = R.string.amount),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 14.dp)
-            )
         }
     }
 }
