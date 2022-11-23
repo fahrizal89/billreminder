@@ -67,5 +67,5 @@ object DateUtil {
         return Date(time).toString()
     }
 
-    fun getDateString(time: Long): String = SimpleDateFormat("dd/MM/yy", Locale.US).format(Date(time))
+    fun getDateString(time: Long, format: String = "dd MMM yyyy"): String = SimpleDateFormat(format, Locale.US).format(Date(time))
 }

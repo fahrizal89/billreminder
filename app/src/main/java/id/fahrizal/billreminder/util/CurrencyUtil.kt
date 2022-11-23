@@ -11,7 +11,7 @@ object CurrencyUtil {
         format.currency = Currency.getInstance("IDR")
 
         return format.format(amount)
-            .replace("Rp", "Rp.")
-            .replace("IDR", "Rp.")
+            .replace("Rp", "Rp ")
+            .replace("IDR", "Rp ")
     }
 }

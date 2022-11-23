@@ -1,5 +1,6 @@
 package id.fahrizal.billreminder.ui
 
+import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -12,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
@@ -23,6 +26,7 @@ import id.fahrizal.billreminder.data.model.BillInfo
 import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
+import id.fahrizal.billreminder.ui.theme.DarkGreen
 import id.fahrizal.billreminder.util.CurrencyUtil
 
 @Composable
@@ -56,41 +60,62 @@ fun BillTable(bills: List<BillInfo> = ArrayList()) {
 
 @Composable
 fun BillList(bills: List<BillInfo> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
-    val context = LocalContext.current
     LazyColumn(
         modifier = modifier
             .padding(bottom = 73.dp)
             .fillMaxWidth()
     ) {
         items(bills) { bill ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            val intent = BillInputActivity.createIntent(context, bill.billId)
-                            context.startActivity(intent)
-                        })
-                    }
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(
-                        text = DateUtil.getDateString(bill.notifDate),
-                        fontSize = MaterialTheme.typography.subtitle2.fontSize,
-                    )
-                }
-                Column(Modifier.weight(2f)) {
-                    Text(text = bill.name, modifier = Modifier.padding(horizontal = 14.dp))
-                }
-                Column(Modifier.weight(2f)) {
-                    Text(
-                        text = CurrencyUtil.getRupiahAmount(bill.amount),
-                        modifier = Modifier.padding(horizontal = 14.dp)
-                    )
-                }
-            }
+            BillItem(bill)
             Divider()
+        }
+    }
+}
+
+@Composable
+fun BillItem(billInfo: BillInfo = BillInfo()) {
+    val context = LocalContext.current
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Column(modifier = Modifier.pointerInput(Unit) {
+            detectTapGestures(onTap = { showBillDetail(context, billInfo) })
+        }) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = billInfo.name,
+                    modifier = Modifier.weight(3f),
+                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = CurrencyUtil.getRupiahAmount(billInfo.amount),
+                    modifier = Modifier.weight(2f),
+                    textAlign = TextAlign.End,
+                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = DateUtil.getDateString(billInfo.notifDate),
+                    modifier = Modifier
+                        .weight(3f)
+                        .padding(vertical = 4.dp),
+                    fontSize = MaterialTheme.typography.subtitle2.fontSize,
+                    color = Color.DarkGray
+                )
+                Text(
+                    text = "Paid",
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.End,
+                    fontSize = MaterialTheme.typography.subtitle2.fontSize,
+                    color = DarkGreen
+                )
+            }
         }
     }
 }
@@ -148,4 +173,9 @@ fun AddButton(onClick: () -> Unit) {
 @Composable
 fun ShowToatError(@StringRes resId: Int) {
     Toast.makeText(LocalContext.current, stringResource(id = resId), Toast.LENGTH_SHORT).show()
+}
+
+private fun showBillDetail(context: Context, billInfo: BillInfo) {
+    val intent = BillInputActivity.createIntent(context, billInfo.billId)
+    context.startActivity(intent)
 }
