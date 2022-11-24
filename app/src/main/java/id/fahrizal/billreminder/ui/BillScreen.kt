@@ -26,6 +26,7 @@ import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 import id.fahrizal.billreminder.ui.theme.DarkGreen
+import id.fahrizal.billreminder.ui.theme.Purple40
 import id.fahrizal.billreminder.util.CurrencyUtil
 
 @Composable
@@ -35,8 +36,8 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             val state = mainViewModel.uiState.collectAsState().value
             when (state) {
-                is MainViewModel.MainUiState.Loaded -> BillTable(state.bills)
-                is MainViewModel.MainUiState.Loading -> BillTable()
+                is MainViewModel.MainUiState.Loaded -> BillPage(state.bills)
+                is MainViewModel.MainUiState.Loading -> BillPage()
                 is MainViewModel.MainUiState.Error -> ShowToatError(state.stringRes)
             }
 
@@ -49,20 +50,30 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun BillTable(bills: List<BillInfo> = ArrayList()) {
+fun BillPage(bills: List<BillInfo> = ArrayList()) {
     Column {
-        Divider(modifier = Modifier.padding(4.dp))
+        Surface(
+            color = Purple40,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.bills),
+                fontSize = MaterialTheme.typography.h6.fontSize,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
         BillList(bills)
     }
 }
 
 @Composable
-fun BillList(bills: List<BillInfo> = ArrayList(), modifier: Modifier = Modifier.padding(8.dp)) {
-    LazyColumn(
-        modifier = modifier
-            .padding(bottom = 73.dp)
-            .fillMaxWidth()
-    ) {
+fun BillList(
+    bills: List<BillInfo> = ArrayList(),
+    modifier: Modifier = Modifier
+        .padding(bottom = 81.dp, start = 4.dp, end = 4.dp)
+        .fillMaxWidth()
+) {
+    LazyColumn(modifier = modifier) {
         items(bills) { bill ->
             BillItem(bill)
             Divider()
@@ -76,7 +87,7 @@ fun BillItem(billInfo: BillInfo = BillInfo()) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(bottom = 8.dp, top = 8.dp)
     ) {
         Column(modifier = Modifier.pointerInput(Unit) {
             detectTapGestures(onTap = { showBillDetail(context, billInfo) })
@@ -108,7 +119,9 @@ fun BillItem(billInfo: BillInfo = BillInfo()) {
                 )
                 Text(
                     text = if (billInfo.isPaid) stringResource(R.string.paid) else stringResource(R.string.unpaid),
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 4.dp),
                     textAlign = TextAlign.End,
                     fontSize = MaterialTheme.typography.subtitle2.fontSize,
                     color = if (billInfo.isPaid) DarkGreen else Color.Unspecified
