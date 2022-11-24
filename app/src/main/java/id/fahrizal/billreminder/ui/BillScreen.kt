@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -108,11 +107,11 @@ fun BillItem(billInfo: BillInfo = BillInfo()) {
                     color = Color.DarkGray
                 )
                 Text(
-                    text = "Paid",
+                    text = if (billInfo.isPaid) stringResource(R.string.paid) else stringResource(R.string.unpaid),
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End,
                     fontSize = MaterialTheme.typography.subtitle2.fontSize,
-                    color = DarkGreen
+                    color = if (billInfo.isPaid) DarkGreen else Color.Unspecified
                 )
             }
         }
