@@ -17,18 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.ui.input.BillInputViewModel.BillInputUiState
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 import id.fahrizal.billreminder.ui.theme.Green40
+import id.fahrizal.billreminder.util.CurrencyUtil
 
 @Composable
 fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
@@ -99,7 +100,7 @@ fun InputForm(bill: Bill, editable: Boolean = true, titleResId: Int = R.string.b
         bill.name = billName
     }
 
-    InputTextField(
+    CurrencyTextField(
         labelResource = R.string.amount,
         hintResource = R.string.amount_hint,
         text = if (bill.amount == 0.0) "" else bill.amount.toInt().toString(),
@@ -107,9 +108,7 @@ fun InputForm(bill: Bill, editable: Boolean = true, titleResId: Int = R.string.b
         keyboardType = KeyboardType.Number,
         enabled = editable
     ) { inputedAmount ->
-        if (inputedAmount.isNotEmpty() && inputedAmount.isDigitsOnly()) {
-            bill.amount = inputedAmount.toDouble()
-        }
+        bill.amount = CurrencyUtil.getAmount(inputedAmount)
     }
 
     Text(
@@ -186,6 +185,44 @@ fun InputTextField(
         onValueChange = {
             textField = it
             textCallback(it.text)
+        },
+        label = { Text(stringResource(labelResource)) },
+        placeholder = { Text(stringResource(hintResource)) },
+        singleLine = singleLine,
+        keyboardOptions = keyboardOptions,
+        enabled = enabled,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun CurrencyTextField(
+    labelResource: Int,
+    hintResource: Int,
+    text: String = "",
+    singleLine: Boolean = true,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .padding(2.dp),
+    textCallback: (String) -> Unit = {}
+) {
+    var textField by remember { mutableStateOf(TextFieldValue(text)) }
+    val keyboardOptions: KeyboardOptions = if (singleLine) {
+        KeyboardOptions(imeAction = ImeAction.Next, keyboardType = keyboardType)
+    } else {
+        KeyboardOptions(imeAction = ImeAction.Default, keyboardType = keyboardType)
+    }
+
+    OutlinedTextField(
+        value = textField,
+        onValueChange = {
+            val idx = if (it.text == "") 0 else it.text.length + 1
+            textField =
+                it.copy(CurrencyUtil.getAmountStr(CurrencyUtil.getAmount(it.text)), TextRange(idx))
+            textCallback(it.text)
+
         },
         label = { Text(stringResource(labelResource)) },
         placeholder = { Text(stringResource(hintResource)) },
