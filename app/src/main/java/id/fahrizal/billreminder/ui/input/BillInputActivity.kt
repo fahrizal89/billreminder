@@ -35,5 +35,5 @@ class BillInputActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-    BillDetailScreen()
+    InputForm(Bill())
 }

@@ -53,7 +53,7 @@ fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
 fun BillPage(bills: List<BillInfo> = ArrayList()) {
     Column {
         Surface(
-            color = Purple40,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
