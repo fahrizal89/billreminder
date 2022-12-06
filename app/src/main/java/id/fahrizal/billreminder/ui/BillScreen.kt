@@ -74,7 +74,7 @@ fun BillList(
         .fillMaxWidth()
 ) {
     LazyColumn(modifier = modifier) {
-        items(bills) { bill ->
+        items(items = bills, key = { it.billId }) { bill ->
             BillItem(bill)
             Divider()
         }
