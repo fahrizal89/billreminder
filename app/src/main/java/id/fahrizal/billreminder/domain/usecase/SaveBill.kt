@@ -9,7 +9,9 @@ import id.fahrizal.billreminder.data.repository.BillRepository
 import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.util.CurrencyUtil
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class SaveBill @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -37,15 +39,18 @@ class SaveBill @Inject constructor(
         val billDetails = ArrayList<BillDetail>()
         val firstReminder =
             DateUtil.getDate(NOTIFY_HOUR, NOTIFY_MINUTE, NOTIFY_SECOND, bill.dayInMonth)
+        val currentTime = Date().time
         for (i: Int in 0 until (year * 12)) {
-            val time = DateUtil.plusMonth(firstReminder.time, i)
+            val reminderTime = DateUtil.plusMonth(firstReminder.time, i)
             val body = context.getString(
                 R.string.bill_notification_message,
                 bill.name + " " + CurrencyUtil.getRupiahAmount(bill.amount)
             )
-            Timber.d("Save BillDetail at " + DateUtil.getTimeInString(time))
-            val billDetail = BillDetail(billId, body, time)
-            billDetails.add(billDetail)
+            Timber.d("Save BillDetail at " + DateUtil.getTimeInString(reminderTime))
+            val billDetail = BillDetail(billId, body, reminderTime)
+            if(currentTime < reminderTime) {
+                billDetails.add(billDetail)
+            }
         }
 
         return billDetails
