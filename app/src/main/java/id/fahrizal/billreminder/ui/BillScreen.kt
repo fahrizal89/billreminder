@@ -28,6 +28,7 @@ import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 import id.fahrizal.billreminder.ui.theme.DarkGreen
 import id.fahrizal.billreminder.ui.theme.LightGrey
 import id.fahrizal.billreminder.util.CurrencyUtil
+import java.util.*
 
 @Composable
 fun BillScreen(mainViewModel: MainViewModel = viewModel()) {
@@ -81,65 +82,7 @@ fun BillList(
     }
 }
 
-@Composable
-fun BillItem(billInfo: BillInfo = BillInfo()) {
-    val context = LocalContext.current
-    val fontWeight = if (billInfo.isPaid) FontWeight.Normal else FontWeight.SemiBold
-    val colorItem = if (billInfo.isPaid) LightGrey else MaterialTheme.colors.surface
 
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = colorItem
-    ) {
-        Column(modifier = Modifier.pointerInput(Unit) {
-            detectTapGestures(onTap = { showBillDetail(context, billInfo) })
-        }) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
-            ) {
-                Text(
-                    text = billInfo.name,
-                    modifier = Modifier.weight(3f),
-                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                    fontWeight = fontWeight
-                )
-                Text(
-                    text = CurrencyUtil.getRupiahAmount(billInfo.amount),
-                    modifier = Modifier.weight(2f),
-                    textAlign = TextAlign.End,
-                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                    fontWeight = fontWeight
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
-            ) {
-                Text(
-                    text = DateUtil.getDateString(billInfo.notifDate),
-                    modifier = Modifier
-                        .weight(3f)
-                        .padding(vertical = 4.dp),
-                    fontSize = MaterialTheme.typography.subtitle2.fontSize,
-                    color = Color.DarkGray
-                )
-                Text(
-                    text = if (billInfo.isPaid) stringResource(R.string.paid) else stringResource(R.string.unpaid),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 4.dp),
-                    textAlign = TextAlign.End,
-                    fontSize = MaterialTheme.typography.subtitle2.fontSize,
-                    color = if (billInfo.isPaid) DarkGreen else Color.Unspecified
-                )
-            }
-        }
-    }
-}
 
 @Composable
 fun AddButton(onClick: () -> Unit) {
@@ -164,9 +107,4 @@ fun AddButton(onClick: () -> Unit) {
 @Composable
 fun ShowToatError(@StringRes resId: Int) {
     Toast.makeText(LocalContext.current, stringResource(id = resId), Toast.LENGTH_SHORT).show()
-}
-
-private fun showBillDetail(context: Context, billInfo: BillInfo) {
-    val intent = BillInputActivity.createIntent(context, billInfo.billId)
-    context.startActivity(intent)
 }
