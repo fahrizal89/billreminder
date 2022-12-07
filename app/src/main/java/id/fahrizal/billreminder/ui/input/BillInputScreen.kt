@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -50,6 +51,9 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
                     Header(titleResId = R.string.add_new_bill)
                     InputForm(bill = state.bill)
                     WideButton(R.string.save) { billInputViewModel.save(state.bill) }
+                    WideOutlinedButton(resId = R.string.delete, fontColor = Color.Red) {
+                        billInputViewModel.delete(state.bill)
+                    }
                 }
 
                 is BillInputUiState.Delete -> {
@@ -300,10 +304,29 @@ fun WideButton(resId: Int, onClick: () -> Unit) {
                 disabledElevation = 0.dp
             ),
             modifier = Modifier
-                .padding(8.dp, 16.dp)
+                .padding(start = 8.dp, end = 8.dp, top = 16.dp)
                 .fillMaxWidth()
         ) {
             Text(text = stringResource(id = resId))
+        }
+    }
+}
+
+@Composable
+fun WideOutlinedButton(resId: Int, fontColor: Color = Color.Unspecified, onClick: () -> Unit) {
+    Column(verticalArrangement = Arrangement.Bottom) {
+        OutlinedButton(
+            onClick,
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = 5.dp,
+                pressedElevation = 10.dp,
+                disabledElevation = 0.dp
+            ),
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, top = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = stringResource(id = resId), color = fontColor)
         }
     }
 }

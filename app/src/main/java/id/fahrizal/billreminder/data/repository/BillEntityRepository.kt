@@ -41,6 +41,12 @@ class BillEntityRepository @Inject constructor(
         return billEntityData.getBillInfoList(billId)
     }
 
+    override suspend fun delete(bill: Bill) {
+        reminderEntityData.delete(bill)
+        val billDetails = reminderEntityData.getBillDetails(bill.id)
+        delete(billDetails)
+    }
+
     override suspend fun delete(billDetails: List<BillDetail>) {
         reminderEntityData.delete(billDetails)
     }

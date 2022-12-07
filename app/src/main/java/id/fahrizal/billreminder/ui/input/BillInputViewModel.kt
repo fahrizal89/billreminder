@@ -9,6 +9,7 @@ import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.data.model.BillDetail
 import id.fahrizal.billreminder.data.model.BillInfo
+import id.fahrizal.billreminder.domain.usecase.DeleteBill
 import id.fahrizal.billreminder.domain.usecase.GetBillInfo
 import id.fahrizal.billreminder.domain.usecase.SaveBill
 import id.fahrizal.billreminder.domain.usecase.SaveBillDetail
@@ -26,7 +27,8 @@ class BillInputViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val saveBill: SaveBill,
     private val getBillInfo: GetBillInfo,
-    private val saveBillDetail: SaveBillDetail
+    private val saveBillDetail: SaveBillDetail,
+    private val deleteBill: DeleteBill
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BillInputUiState>(BillInputUiState.Loading)
@@ -57,6 +59,13 @@ class BillInputViewModel @Inject constructor(
         viewModelScope.launch(ioCoroutineDispatcher) {
             val billDetails = ArrayList<BillDetail>().apply { add(billDetail) }
             saveBillDetail(billDetails)
+            _uiState.value = BillInputUiState.Finish
+        }
+    }
+
+    fun delete(bill: Bill) {
+        viewModelScope.launch(ioCoroutineDispatcher) {
+            deleteBill(bill)
             _uiState.value = BillInputUiState.Finish
         }
     }
