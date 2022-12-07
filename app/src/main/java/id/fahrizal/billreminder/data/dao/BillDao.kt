@@ -16,7 +16,10 @@ interface BillDao {
     @Delete
     fun delete(bill: Bill)
 
-    @Query("select bill_detail.billId, bill_detail.id as billDetailId, bill.name, bill.amount, bill_detail.message, bill_detail.notifDate, bill_detail.isPaid, bill.dayInMonth from bill, bill_detail " +
-        "where bill.id = bill_detail.billId and notifDate < :maxDate and billId like :billId order by bill_detail.isPaid, bill_detail.notifDate")
-    fun getBillInfo(maxDate:Long, billId: String): List<BillInfo>
+    @Query(
+        "select bill_detail.billId, bill_detail.id as billDetailId, bill.name, bill.amount, bill_detail.message, bill_detail.notifDate, bill_detail.isPaid, bill.dayInMonth from bill, \n" +
+            "  (select * from bill_detail  group by billId order by notifDate desc ) as bill_detail\n" +
+            "where bill.id = bill_detail.billId and billId like :billId order by bill_detail.isPaid, notifDate"
+    )
+    fun getBillInfo(billId: String): List<BillInfo>
 }
