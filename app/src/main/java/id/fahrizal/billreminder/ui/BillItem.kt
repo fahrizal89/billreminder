@@ -24,6 +24,7 @@ import id.fahrizal.billreminder.scheduler.util.DateUtil
 import id.fahrizal.billreminder.ui.input.BillInputActivity
 import id.fahrizal.billreminder.ui.theme.DarkGreen
 import id.fahrizal.billreminder.ui.theme.LightGrey
+import id.fahrizal.billreminder.ui.theme.Orange
 import id.fahrizal.billreminder.util.CurrencyUtil
 import java.util.*
 
@@ -93,21 +94,25 @@ private fun showBillDetail(context: Context, billInfo: BillInfo) {
 }
 
 @Composable
-private fun getBillStatus(billInfo: BillInfo): String {
+private fun getBillStatus(billInfo: BillInfo, currentTime: Long = Date().time): String {
     return if (billInfo.isPaid) {
         stringResource(R.string.paid)
-    } else if (DateUtil.plusDay(Date().time, 1) > billInfo.notifDate) {
+    } else if (currentTime > DateUtil.plusDay(billInfo.notifDate, 1)) {
         stringResource(R.string.overdue)
+    } else if (currentTime > billInfo.notifDate) {
+        stringResource(R.string.due)
     } else {
         stringResource(R.string.unpaid)
     }
 }
 
-private fun getBillStatusFontColor(billInfo: BillInfo): Color {
+private fun getBillStatusFontColor(billInfo: BillInfo, currentTime: Long = Date().time): Color {
     return if (billInfo.isPaid) {
         DarkGreen
-    } else if (DateUtil.plusDay(Date().time, 1) > billInfo.notifDate) {
+    } else if (currentTime > DateUtil.plusDay(billInfo.notifDate, 1)) {
         Color.Red
+    } else if (currentTime > billInfo.notifDate) {
+        Orange
     } else {
         Color.Unspecified
     }

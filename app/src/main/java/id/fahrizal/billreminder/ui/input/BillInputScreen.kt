@@ -19,15 +19,12 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.fahrizal.billreminder.R
 import id.fahrizal.billreminder.data.model.Bill
 import id.fahrizal.billreminder.ui.input.BillInputViewModel.BillInputUiState
 import id.fahrizal.billreminder.ui.theme.BillReminderTheme
-import id.fahrizal.billreminder.ui.theme.Green40
-import id.fahrizal.billreminder.ui.theme.Purple40
 import id.fahrizal.billreminder.util.CurrencyUtil
 
 @Composable

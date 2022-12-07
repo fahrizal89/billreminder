@@ -11,7 +11,6 @@ import id.fahrizal.billreminder.util.CurrencyUtil
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class SaveBill @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -48,7 +47,7 @@ class SaveBill @Inject constructor(
             )
             Timber.d("Save BillDetail at " + DateUtil.getTimeInString(reminderTime))
             val billDetail = BillDetail(billId, body, reminderTime)
-            if(currentTime < reminderTime) {
+            if (DateUtil.plusDay(currentTime, -1) < reminderTime) {
                 billDetails.add(billDetail)
             }
         }
