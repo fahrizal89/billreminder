@@ -1,6 +1,7 @@
 package id.fahrizal.billreminder.ui.input
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
@@ -72,7 +73,13 @@ fun BillInputScreen(billInputViewModel: BillInputViewModel = viewModel()) {
                     WideButton(R.string.save) { billInputViewModel.save(bill) }
                 }
 
-                is BillInputUiState.Finish -> activity.finish()
+                is BillInputUiState.Finish -> {
+                    state.notifString?.let { notifString ->
+                        val words = stringResource(notifString, state.varArgs.orEmpty())
+                        Toast.makeText(activity, words, Toast.LENGTH_SHORT).show()
+                    }
+                    activity.finish()
+                }
             }
         }
     }

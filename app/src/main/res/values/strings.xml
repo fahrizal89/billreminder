@@ -24,6 +24,9 @@
 
     <string name="date">Date</string>
     <string name="bill_notification_message">%s need to pay by today!</string>
+    <string name="bill_mark_as_paid_success_notif">Bill mark as paid</string>
+    <string name="save_bill_success_notif">Save bill success</string>
+    <string name="delete_bill_success_notif">%s has been deleted</string>
 
     <string name="error">Error!</string>
 </resources>

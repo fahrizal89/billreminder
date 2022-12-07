@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class BillInputViewModel @Inject constructor(
@@ -45,7 +46,7 @@ class BillInputViewModel @Inject constructor(
     fun save(bill: Bill) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             saveBill(bill)
-            _uiState.value = BillInputUiState.Finish
+            _uiState.value = BillInputUiState.Finish(R.string.save_bill_success_notif)
         }
     }
 
@@ -55,18 +56,18 @@ class BillInputViewModel @Inject constructor(
         }
     }
 
-    fun save(billDetail: BillDetail) {
+    fun markAsPaid(billDetail: BillDetail) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             val billDetails = ArrayList<BillDetail>().apply { add(billDetail) }
             saveBillDetail(billDetails)
-            _uiState.value = BillInputUiState.Finish
+            _uiState.value = BillInputUiState.Finish(R.string.bill_mark_as_paid_success_notif)
         }
     }
 
     fun delete(bill: Bill) {
         viewModelScope.launch(ioCoroutineDispatcher) {
             deleteBill(bill)
-            _uiState.value = BillInputUiState.Finish
+            _uiState.value = BillInputUiState.Finish(R.string.delete_bill_success_notif, bill.name)
         }
     }
 
@@ -88,7 +89,7 @@ class BillInputViewModel @Inject constructor(
         class Read(val billInfo: BillInfo) : BillInputUiState()
         class Edit(val bill: Bill) : BillInputUiState()
         class Delete(val bill: Bill) : BillInputUiState()
-        object Finish : BillInputUiState()
+        class Finish(val notifString: Int? = null, val varArgs: String? = null) : BillInputUiState()
         class Error(@StringRes val stringRes: Int = R.string.error) : BillInputUiState()
     }
 }

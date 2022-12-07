@@ -85,7 +85,7 @@ fun BillDetailScreen(
 
         Button(
             onClick = {
-                billInputViewModel.save(billInfo.toBillDetail())
+                billInputViewModel.markAsPaid(billInfo.toBillDetail())
             },
             elevation = ButtonDefaults.elevation(
                 defaultElevation = 5.dp,
