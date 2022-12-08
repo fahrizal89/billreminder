@@ -100,7 +100,7 @@ fun Header(titleResId: Int = R.string.bill) {
 }
 
 @Composable
-fun InputForm(bill: Bill, editable: Boolean = true) {
+fun InputForm(bill: Bill = Bill(), editable: Boolean = true) {
     Column(
         modifier = Modifier
             .padding(4.dp)
@@ -116,7 +116,7 @@ fun InputForm(bill: Bill, editable: Boolean = true) {
         }
 
         CurrencyTextField(
-            labelResource = R.string.amount,
+            labelResource = R.string.estimation_amount,
             hintResource = R.string.amount_hint,
             text = if (bill.amount == 0.0) "" else bill.amount.toInt().toString(),
             singleLine = true,
@@ -134,7 +134,7 @@ fun InputForm(bill: Bill, editable: Boolean = true) {
 
         Row {
             Text(
-                text = "Day",
+                text = stringResource(id = R.string.date_day),
                 modifier = Modifier
                     .padding(4.dp)
                     .align(Alignment.CenterVertically)
@@ -146,6 +146,12 @@ fun InputForm(bill: Bill, editable: Boolean = true) {
                     bill.dayInMonth = index + 1
                 })
         }
+        Text(
+            text = stringResource(id = R.string.reccurring_every_month),
+            modifier = Modifier.padding(start = 4.dp, end = 4.dp),
+            color = Color.Gray,
+            fontSize = MaterialTheme.typography.caption.fontSize,
+        )
     }
 }
 
@@ -170,10 +176,14 @@ fun NumberSelector(
         }
 
     } else {
-        Button(enabled = enabled, onClick = {
-            keyboardController?.hide()
-            isExpanded = true
-        }, modifier = Modifier.padding(4.dp, 2.dp, 4.dp, 2.dp)) {
+        Button(
+            enabled = enabled,
+            onClick = {
+                keyboardController?.hide()
+                isExpanded = true
+            },
+            modifier = Modifier.padding(4.dp, 2.dp, 4.dp, 2.dp)
+        ) {
             Text(text = currentNumber.toString())
         }
     }

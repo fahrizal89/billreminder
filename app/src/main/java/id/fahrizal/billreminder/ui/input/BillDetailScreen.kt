@@ -38,7 +38,7 @@ fun BillDetailScreen(
         Divider(modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp))
 
         Text(
-            text = stringResource(id = R.string.amount),
+            text = stringResource(id = R.string.estimation_amount),
             color = Color.DarkGray,
             fontSize = MaterialTheme.typography.caption.fontSize,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)

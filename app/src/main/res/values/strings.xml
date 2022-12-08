@@ -11,11 +11,12 @@
     <string name="edit_bill">Edit Bill</string>
     <string name="delete_bill">Delete Bill</string>
     <string name="bill_name" >Bill Name</string>
-    <string name="amount" >Amount</string>
+    <string name="estimation_amount" >Estimation Amount</string>
     <string name="amount_hint">0</string>
     <string name="bill_name_hint" >Ex: Electricity, House Installment, etc</string>
     <string name="reminder_date_label">Reminder Date</string>
     <string name="paid_status">Paid status</string>
+    <string name="date_day">Day</string>
     <string name="mark_as_paid">Mark as paid</string>
     <string name="paid">Paid</string>
     <string name="unpaid">Unpaid</string>
@@ -27,6 +28,7 @@
     <string name="bill_mark_as_paid_success_notif">Bill mark as paid</string>
     <string name="save_bill_success_notif">Save bill success</string>
     <string name="delete_bill_success_notif">%s has been deleted</string>
+    <string name="reccurring_every_month">Recurring every month</string>
 
     <string name="error">Error!</string>
 </resources>

@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import id.fahrizal.billreminder.data.model.Bill
+import id.fahrizal.billreminder.ui.theme.BillReminderTheme
 
 @AndroidEntryPoint
 class BillInputActivity : ComponentActivity() {
@@ -35,5 +35,7 @@ class BillInputActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-    InputForm(Bill())
+    BillReminderTheme {
+        InputForm()
+    }
 }
