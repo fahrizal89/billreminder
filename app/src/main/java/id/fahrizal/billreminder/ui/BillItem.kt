@@ -101,9 +101,7 @@ private fun getBillStatus(billInfo: BillInfo, currentTime: Long = Date().time): 
         stringResource(R.string.overdue)
     } else if (currentTime > billInfo.notifDate) {
         stringResource(R.string.due)
-    } else {
-        stringResource(R.string.unpaid)
-    }
+    } else ""
 }
 
 private fun getBillStatusFontColor(billInfo: BillInfo, currentTime: Long = Date().time): Color {
