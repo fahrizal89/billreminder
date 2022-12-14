@@ -132,20 +132,16 @@ fun InputForm(bill: Bill = Bill(), editable: Boolean = true) {
             color = MaterialTheme.colors.primary
         )
 
-        Row {
-            Text(
-                text = stringResource(id = R.string.date_day),
-                modifier = Modifier
-                    .padding(4.dp)
-                    .align(Alignment.CenterVertically)
-            )
-            NumberSelector(
-                defaultValue = bill.dayInMonth,
-                enabled = editable,
-                onItemClick = { index ->
+        NumberSelector(
+            defaultValue = bill.dayInMonth,
+            enabled = editable,
+            onItemClick = { index ->
+                if (index >= 0) {
                     bill.dayInMonth = index + 1
-                })
-        }
+                } else {
+                    bill.dayInMonth = bill.dayInMonth
+                }
+            })
         Text(
             text = stringResource(id = R.string.reccurring_every_month),
             modifier = Modifier.padding(start = 4.dp, end = 4.dp),
@@ -172,22 +168,29 @@ fun NumberSelector(
                 isExpanded = false
                 currentNumber = index + 1
                 onItemClick(index)
-            })
+            }, currentSelectionIndex = currentNumber - 1)
         }
-
     } else {
-        Button(
-            enabled = enabled,
-            onClick = {
-                keyboardController?.hide()
-                isExpanded = true
-            },
-            modifier = Modifier.padding(4.dp, 2.dp, 4.dp, 2.dp)
-        ) {
-            Text(text = currentNumber.toString())
+        Row {
+            Text(
+                text = stringResource(id = R.string.date_day),
+                modifier = Modifier
+                    .padding(4.dp)
+                    .align(Alignment.CenterVertically)
+            )
+
+            Button(
+                enabled = enabled,
+                onClick = {
+                    keyboardController?.hide()
+                    isExpanded = true
+                },
+                modifier = Modifier.padding(4.dp, 2.dp, 4.dp, 2.dp)
+            ) {
+                Text(text = currentNumber.toString())
+            }
         }
     }
-
 }
 
 @Composable
@@ -277,7 +280,7 @@ fun CurrencyTextField(
 @Composable
 fun DayInMonthGrid(
     onItemClick: (index: Int) -> Unit,
-    modifier: Modifier = Modifier.padding(8.dp)
+    currentSelectionIndex: Int = 24
 ) {
     val dateList by remember {
         val list = ArrayList<String>()
@@ -285,27 +288,35 @@ fun DayInMonthGrid(
         mutableStateOf(list)
     }
 
-    DataGrid(dateList, onItemClick, modifier)
+    DataGrid(dateList, onItemClick, currentSelectionIndex)
 }
 
 @Composable
 fun DataGrid(
     labels: ArrayList<String> = ArrayList(),
     onItemClick: (index: Int) -> Unit,
-    modifier: Modifier = Modifier.padding(8.dp)
+    currentSelectionIndex: Int = 0
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(5),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(labels.size) { i ->
-            Button(onClick = {
-                onItemClick(i)
-            }) {
-                Text(text = labels[i])
+            if (i == currentSelectionIndex) {
+                Button(onClick = {
+                    onItemClick(i)
+                }) {
+                    Text(text = labels[i])
+                }
+            } else {
+                OutlinedButton(onClick = {
+                    onItemClick(i)
+                }) {
+                    Text(text = labels[i])
+                }
             }
+
         }
     }
 }
