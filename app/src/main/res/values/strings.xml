@@ -13,7 +13,7 @@
     <string name="bill_name" >Bill Name</string>
     <string name="estimation_amount" >Estimation Amount</string>
     <string name="amount_hint">0</string>
-    <string name="bill_name_hint" >Ex: Electricity, House Installment, etc</string>
+    <string name="bill_name_hint" >Write your bill here</string>
     <string name="reminder_date_label">Reminder Date</string>
     <string name="paid_status">Paid status</string>
     <string name="date_day">Day</string>
